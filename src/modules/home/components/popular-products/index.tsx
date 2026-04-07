@@ -1,0 +1,119 @@
+import { listProducts } from "@lib/data/products"
+import { HttpTypes } from "@medusajs/types"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import ProductCard from "@modules/products/components/product-card"
+
+type PopularProductsProps = {
+  region: HttpTypes.StoreRegion
+}
+
+const PopularProducts = async ({ region }: PopularProductsProps) => {
+  const {
+    response: { products },
+  } = await listProducts({
+    regionId: region.id,
+    queryParams: {
+      limit: 8,
+      fields:
+        "*variants.calculated_price,+variants.inventory_quantity,+metadata",
+    },
+  }).catch(() => ({ response: { products: [] as HttpTypes.StoreProduct[], count: 0 } }))
+
+  return (
+    <section className="content-container py-12 md:py-16">
+      {/* Section heading */}
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
+          Produse populare
+        </h2>
+        <LocalizedClientLink
+          href="/store"
+          className="hidden sm:flex items-center gap-x-1 text-sm font-medium text-[#F27A1A] hover:text-[#D4600E] transition-colors"
+        >
+          Vezi toate
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </LocalizedClientLink>
+      </div>
+
+      {/* Product grid */}
+      {products.length > 0 ? (
+        <>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} region={region} />
+            ))}
+          </div>
+
+          {/* Mobile "see all" */}
+          <div className="flex sm:hidden justify-center mt-6">
+            <LocalizedClientLink
+              href="/store"
+              className="flex items-center gap-x-1 text-sm font-medium text-[#F27A1A] hover:text-[#D4600E] transition-colors"
+            >
+              Vezi toate produsele
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </LocalizedClientLink>
+          </div>
+        </>
+      ) : (
+        /* Empty state */
+        <div className="flex flex-col items-center justify-center py-16 gap-y-4 text-center">
+          <div className="w-16 h-16 rounded-full bg-[#FFF3E6] flex items-center justify-center">
+            <svg
+              className="w-8 h-8 text-[#F27A1A]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+              />
+            </svg>
+          </div>
+          <p className="text-lg font-semibold text-[#1A1A1A]">
+            Produsele vor fi disponibile în curând
+          </p>
+          <p className="text-sm text-gray-500 max-w-sm">
+            Momentan nu există produse în catalog. Reveniți în curând sau
+            contactați-ne pentru mai multe informații.
+          </p>
+          <LocalizedClientLink
+            href="/contact"
+            className="mt-2 inline-flex items-center gap-x-2 px-5 py-2.5 rounded-full bg-[#F27A1A] text-white text-sm font-semibold hover:bg-[#D4600E] transition-colors"
+          >
+            Contactează-ne
+          </LocalizedClientLink>
+        </div>
+      )}
+    </section>
+  )
+}
+
+export default PopularProducts
