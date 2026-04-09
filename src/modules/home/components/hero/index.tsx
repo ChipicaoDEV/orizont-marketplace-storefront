@@ -10,7 +10,7 @@ const SLIDES = [
     description: "Tot ce ai nevoie pentru proiectul tău, de la fundație până la acoperiș. Livrare rapidă oriunde în țară.",
     buttonText: "Vezi oferta completă",
     buttonLink: "/store",
-    image: "/banners/banner-1.avif", // User will add this to public/
+    image: "/banners/oferta-1.png", // User will add this to public/
     bgClassName: "bg-[#F9FAFB]",
     accentColor: "#F27A1A",
   },
@@ -19,21 +19,12 @@ const SLIDES = [
     title: "Grădina ta, spațiul tău ideal",
     description: "Sisteme de pavaj, mobilier de exterior și unelte profesionale. Reduceri de până la 20% în acest sezon.",
     buttonText: "Explorează categoria",
-    buttonLink: "/categories/gradina",
-    image: "/banners/banner-2.avif", // User will add this to public/
+    buttonLink: "/store",
+    image: "/banners/oferta-2.png", // User will add this to public/
     bgClassName: "bg-[#F0FDF4]",
     accentColor: "#16A34A",
   },
-  {
-    id: 3,
-    title: "Unelte profesionale Powertools",
-    description: "Echipamente de încredere pentru meșterii profesioniști. Performanță garantată și prețuri de depozit.",
-    buttonText: "Descoperă brandurile",
-    buttonLink: "/collections/powertools",
-    image: "/banners/banner-3.avif", // User will add this to public/
-    bgClassName: "bg-[#EFF6FF]",
-    accentColor: "#2563EB",
-  },
+
 ]
 
 const PROMO_TILES = [
@@ -108,7 +99,7 @@ const Hero = () => {
                   className="relative min-w-full h-full block overflow-hidden"
                 >
                   <div
-                    className="w-full h-full bg-center bg-no-repeat bg-cover transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-full bg-center bg-no-repeat bg-cover transition-transform duration-700 "
                     style={{ backgroundImage: `url(${slide.image})`, backgroundColor: slide.accentColor + '10' }}
                   />
                 </LocalizedClientLink>

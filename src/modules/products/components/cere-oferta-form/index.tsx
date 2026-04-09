@@ -1,0 +1,230 @@
+"use client"
+
+import { useState } from "react"
+import { HttpTypes } from "@medusajs/types"
+import { submitQuoteRequest } from "@lib/data/quote-requests"
+
+type Props = {
+  product: HttpTypes.StoreProduct
+  selectedVariantId?: string
+}
+
+const inputClass =
+  "w-full h-10 px-3 rounded-lg border border-gray-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#F27A1A]/30 focus:border-[#F27A1A] transition-colors"
+
+export default function CereOfertaForm({ product, selectedVariantId }: Props) {
+  const [open, setOpen] = useState(false)
+  const [qty, setQty] = useState(1)
+  const [delivery, setDelivery] = useState<"livrare" | "ridicare">("livrare")
+  const [name, setName] = useState("")
+  const [phone, setPhone] = useState("")
+  const [email, setEmail] = useState("")
+  const [address, setAddress] = useState("")
+  const [submitting, setSubmitting] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSubmitting(true)
+    setError(null)
+
+    const result = await submitQuoteRequest({
+      product_id: product.id,
+      variant_id: selectedVariantId ?? null,
+      product_title: product.title ?? "",
+      quantity: qty,
+      delivery_type: delivery,
+      full_name: name.trim(),
+      phone: phone.trim(),
+      email: email.trim(),
+      address: delivery === "livrare" ? address.trim() || null : null,
+    })
+
+    if ("error" in result) {
+      setError(result.error)
+    } else {
+      setSuccess(true)
+    }
+    setSubmitting(false)
+  }
+
+  // ── Success state ────────────────────────────────────────────────────────────
+  if (success) {
+    return (
+      <div className="flex items-start gap-x-3 p-4 bg-green-50 border border-green-200 rounded-xl text-sm text-green-800">
+        <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+        <div>
+          <p className="font-semibold">Cerere trimisă cu succes!</p>
+          <p className="text-green-700 mt-0.5">
+            Te vom contacta în cel mai scurt timp cu oferta personalizată.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-y-2">
+      {/* Toggle button */}
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="w-full h-12 flex items-center justify-center gap-x-2 rounded-xl text-sm font-semibold border-2 border-gray-200 text-gray-600 hover:border-[#F27A1A] hover:text-[#F27A1A] transition-colors duration-150"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+        Cere Ofertă
+        <svg
+          className={`w-4 h-4 ml-auto transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          fill="none" stroke="currentColor" viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {/* Expandable form */}
+      {open && (
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-y-3 p-4 bg-gray-50 border border-gray-100 rounded-xl"
+        >
+          <p className="text-xs text-gray-500">
+            Completează formularul și te contactăm cu o ofertă pentru cantități mari.
+          </p>
+
+          {/* Quantity */}
+          <div className="flex flex-col gap-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Cantitate dorită <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              min={1}
+              value={qty}
+              onChange={(e) => setQty(Math.max(1, parseInt(e.target.value) || 1))}
+              required
+              className={inputClass}
+            />
+          </div>
+
+          {/* Delivery type */}
+          <div className="flex flex-col gap-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Tip livrare <span className="text-red-500">*</span>
+            </label>
+            <div className="grid grid-cols-2 gap-x-2">
+              {(["livrare", "ridicare"] as const).map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => setDelivery(type)}
+                  className={`h-10 rounded-lg text-sm font-medium border-2 transition-all duration-150 ${
+                    delivery === type
+                      ? "border-[#F27A1A] bg-[#FFF3E6] text-[#F27A1A]"
+                      : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
+                  }`}
+                >
+                  {type === "livrare" ? "Livrare la adresă" : "Ridicare personală"}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Address — only for livrare */}
+          {delivery === "livrare" && (
+            <div className="flex flex-col gap-y-1">
+              <label className="text-sm font-medium text-gray-700">
+                Adresă <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Str., nr., localitate, județ"
+                required
+                className={inputClass}
+              />
+            </div>
+          )}
+
+          {/* Full name */}
+          <div className="flex flex-col gap-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Nume complet <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Ion Popescu"
+              required
+              className={inputClass}
+            />
+          </div>
+
+          {/* Phone */}
+          <div className="flex flex-col gap-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Număr de telefon <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="07xx xxx xxx"
+              required
+              className={inputClass}
+            />
+          </div>
+
+          {/* Email */}
+          <div className="flex flex-col gap-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Adresă email <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="exemplu@email.com"
+              required
+              className={inputClass}
+            />
+          </div>
+
+          {/* Error */}
+          {error && (
+            <p className="text-sm text-red-600 bg-red-50 border border-red-100 px-3 py-2 rounded-lg">
+              {error}
+            </p>
+          )}
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full h-11 flex items-center justify-center gap-x-2 rounded-xl text-sm font-semibold bg-[#F27A1A] hover:bg-[#D4600E] text-white transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed mt-1"
+          >
+            {submitting ? (
+              <>
+                <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                </svg>
+                Se trimite...
+              </>
+            ) : (
+              "Trimite cererea"
+            )}
+          </button>
+        </form>
+      )}
+    </div>
+  )
+}

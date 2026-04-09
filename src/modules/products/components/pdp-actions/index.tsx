@@ -12,6 +12,7 @@ import { getVariantQuantity } from "@modules/products/components/stock-badge"
 import PriceDisplay from "@modules/common/components/price-display"
 import StockBadge from "@modules/products/components/stock-badge"
 import { useCartDrawer } from "@modules/cart/context/cart-drawer-context"
+import CereOfertaForm from "@modules/products/components/cere-oferta-form"
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -244,6 +245,9 @@ const PdpActions = ({ product }: PdpActionsProps) => {
           </button>
         )}
       </div>
+
+      {/* Cere Ofertă */}
+      <CereOfertaForm product={product} selectedVariantId={selectedVariant?.id} />
 
     </div>
   )
