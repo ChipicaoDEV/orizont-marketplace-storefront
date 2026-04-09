@@ -131,26 +131,28 @@ export default function NavAccountDropdown({ customer }: Props) {
             </div>
           </div>
 
-          {/* Links */}
-          <ul className="py-2">
-            {ACCOUNT_LINKS.map((link) => (
-              <li key={link.href}>
-                <LocalizedClientLink
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="flex items-center gap-x-3 px-4 py-2.5 text-sm text-[#333333] hover:bg-gray-50 hover:text-[#F27A1A] transition-colors group"
-                >
-                  <span className="text-gray-400 group-hover:text-[#F27A1A] transition-colors flex-shrink-0">
-                    {link.icon}
-                  </span>
-                  <span className="flex-1">{link.label}</span>
-                  <svg className="w-3.5 h-3.5 text-gray-300 group-hover:text-[#F27A1A] opacity-0 group-hover:opacity-100 transition-all -translate-x-1 group-hover:translate-x-0 duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </LocalizedClientLink>
-              </li>
-            ))}
-          </ul>
+          {/* Links — only shown when logged in */}
+          {customer && (
+            <ul className="py-2">
+              {ACCOUNT_LINKS.map((link) => (
+                <li key={link.href}>
+                  <LocalizedClientLink
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-x-3 px-4 py-2.5 text-sm text-[#333333] hover:bg-gray-50 hover:text-[#F27A1A] transition-colors group"
+                  >
+                    <span className="text-gray-400 group-hover:text-[#F27A1A] transition-colors flex-shrink-0">
+                      {link.icon}
+                    </span>
+                    <span className="flex-1">{link.label}</span>
+                    <svg className="w-3.5 h-3.5 text-gray-300 group-hover:text-[#F27A1A] opacity-0 group-hover:opacity-100 transition-all -translate-x-1 group-hover:translate-x-0 duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </LocalizedClientLink>
+                </li>
+              ))}
+            </ul>
+          )}
 
           {/* Footer CTA */}
           <div className="px-4 pb-4 pt-2 border-t border-gray-100">

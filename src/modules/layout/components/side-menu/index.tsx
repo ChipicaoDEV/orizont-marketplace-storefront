@@ -7,6 +7,7 @@ import { Fragment, useState, type FormEvent } from "react"
 import { usePathname } from "next/navigation"
 import { useRouter, useParams } from "next/navigation"
 
+import Image from "next/image"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CountrySelect from "../country-select"
 import LanguageSelect from "../language-select"
@@ -127,7 +128,7 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
     const trimmed = searchQuery.trim()
     if (trimmed) {
       close()
-      router.push(`/${countryCode}/cautare?q=${encodeURIComponent(trimmed)}`)
+      router.push(`/cautare?q=${encodeURIComponent(trimmed)}`)
     }
   }
 
@@ -184,9 +185,16 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                     <LocalizedClientLink
                       href="/"
                       onClick={close}
-                      className="text-xl font-bold text-[#F27A1A] tracking-tight"
+                      className="inline-block"
                     >
-                      Orizont
+                      <Image
+                        src="/logo.png"
+                        alt="Orizont Logo"
+                        width={211}
+                        height={55}
+                        className="h-8 w-auto object-contain"
+                        unoptimized
+                      />
                     </LocalizedClientLink>
                     <button
                       data-testid="close-menu-button"

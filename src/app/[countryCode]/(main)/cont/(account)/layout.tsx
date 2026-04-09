@@ -14,7 +14,7 @@ export default async function ContAccountLayout({ children, params }: Props) {
 
   if (!customer) {
     // Encode the current intended destination so login can redirect back
-    redirect(`/${countryCode}/cont/conectare?redirectTo=/${countryCode}/cont`)
+    redirect(`/cont/conectare?redirectTo=/cont`)
   }
 
   return (

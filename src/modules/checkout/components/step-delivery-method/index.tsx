@@ -61,7 +61,7 @@ export default function StepDeliveryMethod() {
   const { method: selected, setMethod: setSelected } = useDeliveryMethod()
 
   const handleContinue = () => {
-    router.push(`/${countryCode}/checkout?step=address&method=${selected}`)
+    router.push(`/checkout?step=address&method=${selected}`)
   }
 
   return (

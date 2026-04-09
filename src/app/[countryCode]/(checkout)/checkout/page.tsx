@@ -1,4 +1,4 @@
-import { retrieveCart } from "@lib/data/cart"
+import { retrieveCart, clearCartShippingMethods } from "@lib/data/cart"
 import { retrieveCustomer } from "@lib/data/customer"
 import CheckoutForm from "@modules/checkout/templates/checkout-form"
 import { Metadata } from "next"
@@ -16,7 +16,13 @@ type Props = {
 export default async function Checkout({ searchParams }: Props) {
   const { step = "delivery", method = "livrare" } = await searchParams
 
-  const cart = await retrieveCart().catch(() => null)
+  // When entering the delivery step (fresh start or back-navigation), clear any
+  // stale shipping method so the dynamic cost preview and total start clean.
+  // clearCartShippingMethods always returns the current cart; fall back to a
+  // normal retrieve only if it throws.
+  let cart = step === "delivery"
+    ? await clearCartShippingMethods().catch(() => retrieveCart().catch(() => null))
+    : await retrieveCart().catch(() => null)
 
   if (!cart || !cart.items?.length) {
     return notFound()

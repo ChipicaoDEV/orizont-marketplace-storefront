@@ -14,8 +14,14 @@ const DeliveryMethodContext = createContext<DeliveryMethodContextType>({
   setMethod: () => {},
 })
 
-export function DeliveryMethodProvider({ children }: { children: React.ReactNode }) {
-  const [method, setMethod] = useState<Method>("livrare")
+export function DeliveryMethodProvider({
+  children,
+  initialMethod = "livrare",
+}: {
+  children: React.ReactNode
+  initialMethod?: Method
+}) {
+  const [method, setMethod] = useState<Method>(initialMethod)
   return (
     <DeliveryMethodContext.Provider value={{ method, setMethod }}>
       {children}

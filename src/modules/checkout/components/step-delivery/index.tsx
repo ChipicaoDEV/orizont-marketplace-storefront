@@ -249,7 +249,7 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
   // After address + shipping method saved, redirect to payment
   useEffect(() => {
     if (addressSaved) {
-      router.push(`/${countryCode}/checkout?step=payment&method=${method}`)
+      router.push(`/checkout?step=payment&method=${method}`)
     }
   }, [addressSaved, router, countryCode, method])
 
@@ -280,7 +280,7 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
       {/* Back to delivery method */}
       <button
         type="button"
-        onClick={() => router.push(`/${countryCode}/checkout?step=delivery`)}
+        onClick={() => router.push(`/checkout?step=delivery`)}
         className="flex items-center gap-x-1.5 text-sm text-gray-400 hover:text-[#F27A1A] transition-colors w-fit -mb-2"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

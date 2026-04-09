@@ -25,7 +25,7 @@ export default async function CautarePage({ params, searchParams }: Props) {
 
   // Redirect to store if no query
   if (!q?.trim()) {
-    redirect(`/${countryCode}/store`)
+    redirect(`/store`)
   }
 
   return (

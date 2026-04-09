@@ -2,7 +2,6 @@
 
 import { useActionState, useState } from "react"
 import Link from "next/link"
-import { useParams } from "next/navigation"
 import { signupPage } from "@lib/data/customer"
 
 // ── Field component ───────────────────────────────────────────────────────────
@@ -128,7 +127,6 @@ type RegisterCardProps = {
 }
 
 export default function RegisterCard({ redirectTo }: RegisterCardProps) {
-  const { countryCode } = useParams() as { countryCode: string }
   const [serverError, formAction, isPending] = useActionState(signupPage, null)
 
   // Client-side password match validation
@@ -150,7 +148,7 @@ export default function RegisterCard({ redirectTo }: RegisterCardProps) {
   }
 
   const displayError = clientError ?? serverError
-  const loginHref = `/${countryCode}/cont/conectare${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`
+  const loginHref = `/cont/conectare${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`
 
   return (
     <div className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm px-8 py-10">
@@ -168,8 +166,6 @@ export default function RegisterCard({ redirectTo }: RegisterCardProps) {
 
       {/* Form */}
       <form action={wrappedAction} className="flex flex-col gap-y-4">
-        {/* Hidden fields */}
-        <input type="hidden" name="countryCode" value={countryCode} />
         <input type="hidden" name="redirectTo" value={redirectTo} />
 
         {/* Name row */}
@@ -242,11 +238,11 @@ export default function RegisterCard({ redirectTo }: RegisterCardProps) {
         {/* Terms */}
         <p className="text-xs text-gray-400 leading-relaxed">
           Prin înregistrare ești de acord cu{" "}
-          <Link href={`/${countryCode}/termeni-si-conditii`} className="text-[#F27A1A] hover:underline">
+          <Link href={`/termeni-si-conditii`} className="text-[#F27A1A] hover:underline">
             Termenii și Condițiile
           </Link>{" "}
           și{" "}
-          <Link href={`/${countryCode}/politica-de-confidentialitate`} className="text-[#F27A1A] hover:underline">
+          <Link href={`/politica-de-confidentialitate`} className="text-[#F27A1A] hover:underline">
             Politica de Confidențialitate
           </Link>{" "}
           Orizont.

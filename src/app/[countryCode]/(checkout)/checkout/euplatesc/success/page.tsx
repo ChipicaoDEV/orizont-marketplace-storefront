@@ -45,14 +45,14 @@ export default async function EuplatescSuccessPage({ params, searchParams }: Pro
   const cartId = sp.cart_id
 
   if (!cartId) {
-    redirect(`/${countryCode}/checkout?step=payment`)
+    redirect(`/checkout?step=payment`)
   }
 
   // EuPlătesc signals success with action="0"
   if (sp.action !== "0") {
     const msg = sp.message ? encodeURIComponent(sp.message) : ""
     redirect(
-      `/${countryCode}/checkout/euplatesc/fail?cart_id=${cartId}${msg ? `&message=${msg}` : ""}`
+      `/checkout/euplatesc/fail?cart_id=${cartId}${msg ? `&message=${msg}` : ""}`
     )
   }
 
@@ -60,7 +60,7 @@ export default async function EuplatescSuccessPage({ params, searchParams }: Pro
   const cart = await retrieveCart(cartId)
 
   if (!cart) {
-    redirect(`/${countryCode}/checkout?step=payment`)
+    redirect(`/checkout?step=payment`)
   }
 
   // Initiate payment session (system_default = manual/COD-style capture).
@@ -76,14 +76,14 @@ export default async function EuplatescSuccessPage({ params, searchParams }: Pro
     // placeOrder returns the cart object if the order was not created.
     // Redirect to fail page in that case.
     redirect(
-      `/${countryCode}/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent("Comanda nu a putut fi finalizată. Contactează-ne.")}`
+      `/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent("Comanda nu a putut fi finalizată. Contactează-ne.")}`
     )
   } catch (e) {
     // Rethrow Next.js redirect errors so the navigation continues
     if (isRedirectError(e)) throw e
 
     redirect(
-      `/${countryCode}/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent("Eroare la finalizarea comenzii. Contactează-ne.")}`
+      `/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent("Eroare la finalizarea comenzii. Contactează-ne.")}`
     )
   }
 }

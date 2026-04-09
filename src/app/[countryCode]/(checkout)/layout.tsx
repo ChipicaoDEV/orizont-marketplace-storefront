@@ -1,3 +1,4 @@
+import Image from "next/image"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 export default function CheckoutLayout({
@@ -25,9 +26,14 @@ export default function CheckoutLayout({
 
           {/* Logo */}
           <LocalizedClientLink href="/" className="flex items-center gap-x-2">
-            <span className="text-xl font-bold text-[#1A1A1A] tracking-tight">
-              Orizont
-            </span>
+            <Image
+              src="/logo.png"
+              alt="Orizont Logo"
+              width={211}
+              height={55}
+              className="h-7 w-auto object-contain"
+              unoptimized
+            />
             <span className="hidden sm:inline text-xs font-medium text-gray-400 uppercase tracking-widest mt-0.5">
               Checkout
             </span>

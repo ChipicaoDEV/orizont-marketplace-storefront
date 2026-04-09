@@ -1,7 +1,7 @@
 import { listProducts } from "@lib/data/products"
 import { HttpTypes } from "@medusajs/types"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import ProductCard from "@modules/products/components/product-card"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 type PopularProductsProps = {
   region: HttpTypes.StoreRegion
@@ -31,54 +31,19 @@ const PopularProducts = async ({ region }: PopularProductsProps) => {
           className="hidden sm:flex items-center gap-x-1 text-sm font-medium text-[#F27A1A] hover:text-[#D4600E] transition-colors"
         >
           Vezi toate
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </LocalizedClientLink>
       </div>
 
       {/* Product grid */}
       {products.length > 0 ? (
-        <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} region={region} />
-            ))}
-          </div>
-
-          {/* Mobile "see all" */}
-          <div className="flex sm:hidden justify-center mt-6">
-            <LocalizedClientLink
-              href="/store"
-              className="flex items-center gap-x-1 text-sm font-medium text-[#F27A1A] hover:text-[#D4600E] transition-colors"
-            >
-              Vezi toate produsele
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </LocalizedClientLink>
-          </div>
-        </>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} region={region} />
+          ))}
+        </div>
       ) : (
         /* Empty state */
         <div className="flex flex-col items-center justify-center py-16 gap-y-4 text-center">
@@ -104,12 +69,12 @@ const PopularProducts = async ({ region }: PopularProductsProps) => {
             Momentan nu există produse în catalog. Reveniți în curând sau
             contactați-ne pentru mai multe informații.
           </p>
-          <LocalizedClientLink
+          <a
             href="/contact"
             className="mt-2 inline-flex items-center gap-x-2 px-5 py-2.5 rounded-full bg-[#F27A1A] text-white text-sm font-semibold hover:bg-[#D4600E] transition-colors"
           >
             Contactează-ne
-          </LocalizedClientLink>
+          </a>
         </div>
       )}
     </section>

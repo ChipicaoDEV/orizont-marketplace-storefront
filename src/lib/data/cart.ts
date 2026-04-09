@@ -217,6 +217,57 @@ export async function deleteLineItem(lineId: string) {
     .catch(medusaError)
 }
 
+/**
+ * Removes all shipping methods from the current cart and returns the fresh cart.
+ * Used when the user re-enters the checkout delivery step so they always start clean.
+ */
+export async function clearCartShippingMethods(): Promise<HttpTypes.StoreCart | null> {
+  const cartId = await getCartId()
+  if (!cartId) return null
+
+  const headers = { ...(await getAuthHeaders()) }
+  const fields =
+    "*items, *region, *items.product, *items.variant, *items.thumbnail, *items.metadata, +items.total, *promotions, +shipping_methods.name, +shipping_total, +subtotal, +total"
+
+  // Fetch cart directly (bypassing cache) to get current shipping method IDs
+  const cartWithMethods = await sdk.client
+    .fetch<HttpTypes.StoreCartResponse>(`/store/carts/${cartId}`, {
+      method: "GET",
+      query: { fields },
+      headers,
+      cache: "no-store",
+    })
+    .then(({ cart }) => cart)
+    .catch(() => null)
+
+  if (!cartWithMethods?.shipping_methods?.length) return cartWithMethods ?? null
+
+  for (const method of cartWithMethods.shipping_methods) {
+    await sdk.client
+      .fetch(`/store/carts/${cartId}/shipping-methods/${method.id}`, {
+        method: "DELETE",
+        headers,
+      })
+      .catch(() => null)
+  }
+
+  // Fetch the updated cart (no cache) and invalidate so subsequent renders are fresh
+  const freshCart = await sdk.client
+    .fetch<HttpTypes.StoreCartResponse>(`/store/carts/${cartId}`, {
+      method: "GET",
+      query: { fields },
+      headers,
+      cache: "no-store",
+    })
+    .then(({ cart }) => cart)
+    .catch(() => null)
+
+  const cartCacheTag = await getCacheTag("carts")
+  revalidateTag(cartCacheTag)
+
+  return freshCart
+}
+
 export async function setShippingMethod({
   cartId,
   shippingMethodId,
@@ -419,7 +470,7 @@ export async function placeOrder(cartId?: string) {
     revalidateTag(orderCacheTag)
 
     removeCartId()
-    redirect(`/${countryCode}/order/${cartRes?.order.id}/confirmed`)
+    redirect(`/order/${cartRes?.order.id}/confirmed`)
   }
 
   return cartRes.cart
@@ -561,7 +612,7 @@ export async function attachShippingMethod(
     return e.message ?? "A apărut o eroare. Încearcă din nou."
   }
 
-  redirect(`/${countryCode}/checkout?step=payment&method=${deliveryMethod}`)
+  redirect(`/checkout?step=payment&method=${deliveryMethod}`)
 }
 
 /**
@@ -589,7 +640,7 @@ export async function updateRegion(countryCode: string, currentPath: string) {
   const productsCacheTag = await getCacheTag("products")
   revalidateTag(productsCacheTag)
 
-  redirect(`/${countryCode}${currentPath}`)
+  redirect(currentPath)
 }
 
 export async function listCartOptions() {

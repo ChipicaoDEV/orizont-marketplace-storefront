@@ -17,16 +17,16 @@ const Login = ({ setCurrentView }: Props) => {
       className="max-w-sm w-full flex flex-col items-center"
       data-testid="login-page"
     >
-      <h1 className="text-4xl font-bold uppercase tracking-tighter text-gray-900 mb-2">
-        Bine ai revenit
+      <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        Bun venit înapoi
       </h1>
-      <p className="text-center text-gray-500 font-medium mb-8">
-        Autentifică-te pentru o experiență de cumpărături optimizată.
+      <p className="text-center text-gray-500 text-sm mb-8 leading-relaxed">
+        Introdu datele tale pentru a accesa contul <span className="font-semibold text-gray-900">Orizont</span>.
       </p>
       <form className="w-full" action={formAction}>
         <div className="flex flex-col w-full gap-y-3">
           <Input
-            label="E-mail"
+            label="Adresă E-mail"
             name="email"
             type="email"
             title="Introdu o adresă de e-mail validă."
@@ -44,20 +44,19 @@ const Login = ({ setCurrentView }: Props) => {
           />
         </div>
         <ErrorMessage error={message} data-testid="login-error-message" />
-        <SubmitButton data-testid="sign-in-button" className="w-full mt-8 bg-black text-white hover:bg-gray-800 transition-colors h-12 rounded-2xl font-bold uppercase tracking-widest text-xs">
-          Autentificare
+        <SubmitButton data-testid="sign-in-button" className="w-full mt-8 bg-[#F27A1A] hover:bg-[#D4600E] text-white transition-all duration-200 h-12 rounded-2xl font-bold uppercase tracking-widest text-xs shadow-sm shadow-orange-100">
+          Conectare
         </SubmitButton>
       </form>
       <span className="text-center text-gray-500 text-sm font-medium mt-8">
         Nu ești membru?{" "}
         <button
           onClick={() => setCurrentView(LOGIN_VIEW.REGISTER)}
-          className="text-gray-900 font-bold underline underline-offset-4 hover:text-black transition-colors"
+          className="text-[#F27A1A] font-bold underline underline-offset-4 hover:text-[#D4600E] transition-colors"
           data-testid="register-button"
         >
-          Alătură-te nouă
+          Creează un cont
         </button>
-        .
       </span>
     </div>
   )

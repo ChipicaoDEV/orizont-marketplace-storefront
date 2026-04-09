@@ -1,8 +1,7 @@
 "use client"
 
-import { useActionState, useState } from "react"
+import { useActionState } from "react"
 import Link from "next/link"
-import { useParams } from "next/navigation"
 import { loginPage } from "@lib/data/customer"
 
 // ── Simple field wrapper ──────────────────────────────────────────────────────
@@ -121,11 +120,10 @@ type LoginCardProps = {
 }
 
 export default function LoginCard({ redirectTo }: LoginCardProps) {
-  const { countryCode } = useParams() as { countryCode: string }
   const [error, formAction, isPending] = useActionState(loginPage, null)
 
-  const registerHref = `/${countryCode}/cont/inregistrare${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`
-  const forgotHref = `/${countryCode}/cont/parola-uitata`
+  const registerHref = `/cont/inregistrare${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`
+  const forgotHref = `/cont/parola-uitata`
 
   return (
     <div className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm px-8 py-10">
@@ -143,8 +141,6 @@ export default function LoginCard({ redirectTo }: LoginCardProps) {
 
       {/* Form */}
       <form action={formAction} className="flex flex-col gap-y-4">
-        {/* Hidden fields */}
-        <input type="hidden" name="countryCode" value={countryCode} />
         <input type="hidden" name="redirectTo" value={redirectTo} />
 
         <Field

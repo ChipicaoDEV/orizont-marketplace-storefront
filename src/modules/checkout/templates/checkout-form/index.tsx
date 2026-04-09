@@ -6,6 +6,7 @@ import StepDeliveryMethod from "@modules/checkout/components/step-delivery-metho
 import StepDelivery from "@modules/checkout/components/step-delivery"
 import StepPayment from "@modules/checkout/components/step-payment"
 import DeliveryCostPreview from "@modules/checkout/components/delivery-cost-preview"
+import CartTotalPreview from "@modules/checkout/components/cart-total-preview"
 import { DeliveryMethodProvider } from "@modules/checkout/context/delivery-method-context"
 
 // ── Cart mini-summary ─────────────────────────────────────────────────────────
@@ -28,6 +29,11 @@ function CartMiniSummary({
   const items = cart.items ?? []
   const total = cart.total ?? 0
   const itemCount = items.reduce((s, i) => s + i.quantity, 0)
+
+  // Strip any stale shipping cost from the base total used for the preview.
+  // This makes the delivery/address steps correct regardless of whether a
+  // previous shipping method is still attached to the cart.
+  const productTotal = total - (cart.shipping_total ?? 0)
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col gap-y-4">
@@ -71,10 +77,14 @@ function CartMiniSummary({
             <span>{formatRon(cart.shipping_total)}</span>
           </div>
         ) : null}
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-500">Total</span>
-          <span className="text-base font-bold text-[#1A1A1A]">{formatRon(total)}</span>
-        </div>
+        {showDeliveryPreview ? (
+          <CartTotalPreview baseTotal={productTotal} />
+        ) : (
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-gray-500">Total</span>
+            <span className="text-base font-bold text-[#1A1A1A]">{formatRon(total)}</span>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -108,7 +118,7 @@ export default async function CheckoutForm({ cart, customer, step, method }: Che
       : []
 
   return (
-    <DeliveryMethodProvider>
+    <DeliveryMethodProvider initialMethod={deliveryMethod}>
       <div className="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Progress bar */}
         <div className="mb-10">
@@ -135,7 +145,7 @@ export default async function CheckoutForm({ cart, customer, step, method }: Che
           <div className="w-full lg:w-80 lg:sticky lg:top-[var(--header-height,64px)]">
             <CartMiniSummary
               cart={cart}
-              showDeliveryPreview={currentStep === "delivery"}
+              showDeliveryPreview={currentStep === "delivery" || currentStep === "address"}
             />
           </div>
         </div>

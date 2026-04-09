@@ -70,7 +70,7 @@ export default async function ContDashboardPage({ params }: Props) {
         <div className="flex items-center justify-between p-5 border-b border-gray-100">
           <h2 className="text-base font-bold text-[#1A1A1A]">Comenzi recente</h2>
           <Link
-            href={`/${countryCode}/cont/comenzi`}
+            href={`/cont/comenzi`}
             className="text-sm text-[#F27A1A] hover:text-[#D4600E] font-medium transition-colors"
           >
             Vezi toate →
@@ -85,7 +85,7 @@ export default async function ContDashboardPage({ params }: Props) {
             </svg>
             <p className="text-sm text-gray-400">Nu ai plasate comenzi încă.</p>
             <Link
-              href={`/${countryCode}/store`}
+              href={`/store`}
               className="inline-block mt-3 text-sm font-medium text-[#F27A1A] hover:text-[#D4600E]"
             >
               Descoperă produsele →
@@ -98,7 +98,7 @@ export default async function ContDashboardPage({ params }: Props) {
               return (
                 <li key={order.id}>
                   <Link
-                    href={`/${countryCode}/cont/comenzi/${order.id}`}
+                    href={`/cont/comenzi/${order.id}`}
                     className="flex items-center justify-between px-5 py-4 hover:bg-gray-50 transition-colors"
                   >
                     <div className="flex flex-col gap-y-0.5">

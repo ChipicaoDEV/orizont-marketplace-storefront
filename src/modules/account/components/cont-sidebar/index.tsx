@@ -45,7 +45,7 @@ export default function ContSidebar({
   const pathname = usePathname()
   const [isPending, startTransition] = useTransition()
 
-  const base = `/${countryCode}/cont`
+  const base = `/cont`
   const is = (path: string) =>
     path === "" ? pathname === base : pathname.startsWith(`${base}/${path}`)
 

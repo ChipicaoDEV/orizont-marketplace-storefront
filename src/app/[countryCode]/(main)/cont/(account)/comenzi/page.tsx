@@ -39,7 +39,7 @@ export default async function ComenziPage({ params }: Props) {
           </svg>
           <p className="text-gray-400 mb-4">Nu ai plasat nicio comandă încă.</p>
           <Link
-            href={`/${countryCode}/store`}
+            href={`/store`}
             className="inline-block px-5 py-2.5 bg-[#F27A1A] text-white text-sm font-semibold rounded-lg hover:bg-[#D4600E] transition-colors"
           >
             Descoperă produsele
@@ -53,7 +53,7 @@ export default async function ComenziPage({ params }: Props) {
               return (
                 <li key={order.id}>
                   <Link
-                    href={`/${countryCode}/cont/comenzi/${order.id}`}
+                    href={`/cont/comenzi/${order.id}`}
                     className="flex items-center justify-between px-5 py-4 hover:bg-gray-50 transition-colors"
                   >
                     <div className="flex flex-col gap-y-1">

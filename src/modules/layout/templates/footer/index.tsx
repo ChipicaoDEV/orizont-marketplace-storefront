@@ -1,9 +1,17 @@
+import Image from "next/image"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+
+const CERT_LINKS = [
+  { label: "ISO 9001 : 2008", href: "/certificari" },
+  { label: "ISO 14001 : 2005", href: "/certificari" },
+  { label: "ISO 18001 : 2008", href: "/certificari" },
+]
 
 const INFO_LINKS = [
   { label: "Despre noi", href: "/despre-noi" },
   { label: "Livrare", href: "/livrare" },
   { label: "Contact", href: "/contact" },
+  { label: "Serviciu Clienți", href: "/customer-service" },
   { label: "Termeni și condiții", href: "/termeni-si-conditii" },
 ]
 
@@ -30,15 +38,22 @@ export default function Footer() {
       {/* ── Main footer body ── */}
       <div className="bg-[#1A1A1A]">
         <div className="content-container py-12 md:py-14">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 md:gap-8">
 
             {/* Column 1 — Company info */}
             <div className="flex flex-col gap-y-4">
               <LocalizedClientLink
                 href="/"
-                className="text-xl font-bold text-[#F27A1A] tracking-tight"
+                className="inline-block"
               >
-                Orizont
+                <Image
+                  src="/logo.png"
+                  alt="Orizont Logo"
+                  width={211}
+                  height={55}
+                  className="h-10 w-auto object-contain brightness-0 invert"
+                  unoptimized
+                />
               </LocalizedClientLink>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Depozit de materiale de construcții cu o gamă completă de produse
@@ -90,7 +105,26 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Column 3 — Account links */}
+            {/* Column 3 — Certifications */}
+            <div className="flex flex-col gap-y-4">
+              <h3 className="text-sm font-semibold text-white uppercase tracking-wider">
+                Certificări
+              </h3>
+              <ul className="flex flex-col gap-y-2">
+                {CERT_LINKS.map(({ label, href }) => (
+                  <li key={label}>
+                    <LocalizedClientLink
+                      href={href}
+                      className="text-sm text-gray-400 hover:text-white transition-colors duration-150"
+                    >
+                      {label}
+                    </LocalizedClientLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 4 — Account links */}
             <div className="flex flex-col gap-y-4">
               <h3 className="text-sm font-semibold text-white uppercase tracking-wider">
                 Contul meu

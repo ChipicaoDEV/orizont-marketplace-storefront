@@ -50,19 +50,10 @@ const CategoriesSection = () => {
   return (
     <section className="content-container py-12 md:py-16">
       {/* Section heading */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="mb-8">
         <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
           Categorii de produse
         </h2>
-        <LocalizedClientLink
-          href="/store"
-          className="hidden sm:flex items-center gap-x-1 text-sm font-medium text-[#F27A1A] hover:text-[#D4600E] transition-colors"
-        >
-          Vezi toate
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </LocalizedClientLink>
       </div>
 
       {/* Category grid */}
@@ -107,18 +98,6 @@ const CategoriesSection = () => {
         ))}
       </div>
 
-      {/* Mobile "see all" link */}
-      <div className="flex sm:hidden justify-center mt-6">
-        <LocalizedClientLink
-          href="/store"
-          className="flex items-center gap-x-1 text-sm font-medium text-[#F27A1A] hover:text-[#D4600E] transition-colors"
-        >
-          Vezi toate categoriile
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </LocalizedClientLink>
-      </div>
     </section>
   )
 }

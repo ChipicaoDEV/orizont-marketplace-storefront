@@ -14,11 +14,11 @@ type ProductTabsProps = {
 const ProductTabs = ({ product }: ProductTabsProps) => {
   const tabs = [
     {
-      label: "Product Information",
+      label: "Informații produs",
       component: <ProductInfoTab product={product} />,
     },
     {
-      label: "Shipping & Returns",
+      label: "Livrare și returnări",
       component: <ShippingInfoTab />,
     },
   ]
@@ -43,33 +43,33 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
 
 const ProductInfoTab = ({ product }: ProductTabsProps) => {
   return (
-    <div className="text-small-regular py-8">
-      <div className="grid grid-cols-2 gap-x-8">
+    <div className="text-sm text-gray-600 py-6">
+      <div className="grid grid-cols-2 gap-x-8 gap-y-4">
         <div className="flex flex-col gap-y-4">
           <div>
-            <span className="font-semibold">Material</span>
-            <p>{product.material ? product.material : "-"}</p>
+            <span className="text-xs text-gray-400 uppercase tracking-wider block mb-1">Material</span>
+            <p className="text-[#1A1A1A]">{product.material ? product.material : "—"}</p>
           </div>
           <div>
-            <span className="font-semibold">Country of origin</span>
-            <p>{product.origin_country ? product.origin_country : "-"}</p>
+            <span className="text-xs text-gray-400 uppercase tracking-wider block mb-1">Țara de origine</span>
+            <p className="text-[#1A1A1A]">{product.origin_country ? product.origin_country : "—"}</p>
           </div>
           <div>
-            <span className="font-semibold">Type</span>
-            <p>{product.type ? product.type.value : "-"}</p>
+            <span className="text-xs text-gray-400 uppercase tracking-wider block mb-1">Tip</span>
+            <p className="text-[#1A1A1A]">{product.type ? product.type.value : "—"}</p>
           </div>
         </div>
         <div className="flex flex-col gap-y-4">
           <div>
-            <span className="font-semibold">Weight</span>
-            <p>{product.weight ? `${product.weight} g` : "-"}</p>
+            <span className="text-xs text-gray-400 uppercase tracking-wider block mb-1">Greutate</span>
+            <p className="text-[#1A1A1A]">{product.weight ? `${product.weight} g` : "—"}</p>
           </div>
           <div>
-            <span className="font-semibold">Dimensions</span>
-            <p>
+            <span className="text-xs text-gray-400 uppercase tracking-wider block mb-1">Dimensiuni</span>
+            <p className="text-[#1A1A1A]">
               {product.length && product.width && product.height
-                ? `${product.length}L x ${product.width}W x ${product.height}H`
-                : "-"}
+                ? `${product.length}L × ${product.width}W × ${product.height}H`
+                : "—"}
             </p>
           </div>
         </div>
@@ -80,36 +80,38 @@ const ProductInfoTab = ({ product }: ProductTabsProps) => {
 
 const ShippingInfoTab = () => {
   return (
-    <div className="text-small-regular py-8">
-      <div className="grid grid-cols-1 gap-y-8">
-        <div className="flex items-start gap-x-2">
-          <FastDelivery />
+    <div className="text-sm py-6">
+      <div className="grid grid-cols-1 gap-y-6">
+        <div className="flex items-start gap-x-3">
+          <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0 text-[#F27A1A]">
+            <FastDelivery />
+          </div>
           <div>
-            <span className="font-semibold">Fast delivery</span>
-            <p className="max-w-sm">
-              Your package will arrive in 3-5 business days at your pick up
-              location or in the comfort of your home.
+            <span className="font-medium text-[#1A1A1A]">Livrare rapidă</span>
+            <p className="text-gray-500 max-w-sm mt-0.5">
+              Coletul tău va ajunge în 1–3 zile lucrătoare la adresa de livrare sau îl poți ridica din depozitul nostru.
             </p>
           </div>
         </div>
-        <div className="flex items-start gap-x-2">
-          <Refresh />
+        <div className="flex items-start gap-x-3">
+          <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0 text-[#F27A1A]">
+            <Refresh />
+          </div>
           <div>
-            <span className="font-semibold">Simple exchanges</span>
-            <p className="max-w-sm">
-              Is the fit not quite right? No worries - we&apos;ll exchange your
-              product for a new one.
+            <span className="font-medium text-[#1A1A1A]">Schimburi simple</span>
+            <p className="text-gray-500 max-w-sm mt-0.5">
+              Nu ești mulțumit de produs? Te ajutăm să îl înlocuiești cu unul potrivit.
             </p>
           </div>
         </div>
-        <div className="flex items-start gap-x-2">
-          <Back />
+        <div className="flex items-start gap-x-3">
+          <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0 text-[#F27A1A]">
+            <Back />
+          </div>
           <div>
-            <span className="font-semibold">Easy returns</span>
-            <p className="max-w-sm">
-              Just return your product and we&apos;ll refund your money. No
-              questions asked – we&apos;ll do our best to make sure your return
-              is hassle-free.
+            <span className="font-medium text-[#1A1A1A]">Returnări ușoare</span>
+            <p className="text-gray-500 max-w-sm mt-0.5">
+              Returnează produsul și îți rambursăm banii. Facem tot posibilul pentru o returnare fără bătăi de cap.
             </p>
           </div>
         </div>

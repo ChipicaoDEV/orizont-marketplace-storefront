@@ -20,7 +20,7 @@ export default async function LoginPage({ params, searchParams }: Props) {
   // If already logged in, redirect to account or the requested page
   const customer = await retrieveCustomer().catch(() => null)
   if (customer) {
-    redirect(redirectTo || `/${countryCode}/cont`)
+    redirect(redirectTo || `/cont`)
   }
 
   return (

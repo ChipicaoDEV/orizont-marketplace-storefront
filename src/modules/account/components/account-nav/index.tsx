@@ -31,7 +31,7 @@ const AccountNav = ({
   return (
     <div>
       <div className="small:hidden" data-testid="mobile-account-nav">
-        {route !== `/${countryCode}/account` ? (
+        {route !== `/account` ? (
           <LocalizedClientLink
             href="/account"
             className="flex items-center gap-x-2 text-small-regular py-2"
@@ -39,13 +39,13 @@ const AccountNav = ({
           >
             <>
               <ChevronDown className="transform rotate-90" />
-              <span>Account</span>
+              <span>Cont</span>
             </>
           </LocalizedClientLink>
         ) : (
           <>
             <div className="text-xl-semi mb-4 px-8">
-              Hello {customer?.first_name}
+              Bună, {customer?.first_name}
             </div>
             <div className="text-base-regular">
               <ul>
@@ -58,7 +58,7 @@ const AccountNav = ({
                     <>
                       <div className="flex items-center gap-x-2">
                         <User />
-                        <span>Profile</span>
+                        <span>Profil</span>
                       </div>
                       <ChevronDown className="transform -rotate-90" />
                     </>
@@ -73,7 +73,7 @@ const AccountNav = ({
                     <>
                       <div className="flex items-center gap-x-2">
                         <MapPin />
-                        <span>Addresses</span>
+                        <span>Adrese</span>
                       </div>
                       <ChevronDown className="transform -rotate-90" />
                     </>
@@ -87,7 +87,7 @@ const AccountNav = ({
                   >
                     <div className="flex items-center gap-x-2">
                       <Package />
-                      <span>Orders</span>
+                      <span>Comenzi</span>
                     </div>
                     <ChevronDown className="transform -rotate-90" />
                   </LocalizedClientLink>
@@ -101,7 +101,7 @@ const AccountNav = ({
                   >
                     <div className="flex items-center gap-x-2">
                       <ArrowRightOnRectangle />
-                      <span>Log out</span>
+                      <span>Deconectare</span>
                     </div>
                     <ChevronDown className="transform -rotate-90" />
                   </button>
@@ -194,7 +194,7 @@ const AccountNavLink = ({
 }: AccountNavLinkProps) => {
   const { countryCode }: { countryCode: string } = useParams()
 
-  const active = route.split(countryCode)[1] === href
+  const active = route === href
   return (
     <LocalizedClientLink
       href={href}

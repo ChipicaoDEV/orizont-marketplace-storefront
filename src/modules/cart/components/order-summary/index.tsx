@@ -28,9 +28,10 @@ type OrderSummaryProps = {
 const OrderSummary = ({ cart }: OrderSummaryProps) => {
   const step = getCheckoutStep(cart)
   const subtotal = cart.item_subtotal ?? cart.subtotal ?? 0
-  const shipping = cart.shipping_subtotal ?? null
   const discount = cart.discount_subtotal
-  const total = cart.total ?? 0
+  // Exclude any stale shipping cost attached from a previous checkout session —
+  // shipping is chosen during checkout, not on the cart page.
+  const total = (cart.total ?? 0) - (cart.shipping_total ?? 0)
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex flex-col gap-y-5">

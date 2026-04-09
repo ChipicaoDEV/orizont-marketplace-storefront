@@ -6,6 +6,7 @@ import { getLocale } from "@lib/data/locale-actions"
 import { retrieveCustomer } from "@lib/data/customer"
 import { StoreRegion } from "@medusajs/types"
 
+import Image from "next/image"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import TopBar from "@modules/layout/components/top-bar"
 import SearchBar from "@modules/layout/components/search-bar"
@@ -46,10 +47,18 @@ export default async function Nav() {
             {/* Logo */}
             <LocalizedClientLink
               href="/"
-              className="flex-shrink-0 text-xl md:text-2xl font-bold text-[#F27A1A] tracking-tight leading-none"
+              className="flex-shrink-0"
               data-testid="nav-store-link"
             >
-              Orizont
+                <Image
+                  src="/logo.png"
+                  alt="Orizont Logo"
+                  width={211}
+                  height={55}
+                  className="h-8 md:h-10 w-auto object-contain"
+                  priority
+                  unoptimized
+                />
             </LocalizedClientLink>
 
             {/* Search bar — hidden on mobile, shown on md+ */}

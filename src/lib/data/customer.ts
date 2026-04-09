@@ -140,7 +140,7 @@ export async function signout(countryCode: string) {
   const cartCacheTag = await getCacheTag("carts")
   revalidateTag(cartCacheTag)
 
-  redirect(`/${countryCode}/account`)
+  redirect(`/account`)
 }
 
 // ── Romanian error translation ────────────────────────────────────────────────
@@ -190,7 +190,7 @@ export async function signoutCont(countryCode: string) {
   await removeCartId()
   const cartCacheTag = await getCacheTag("carts")
   revalidateTag(cartCacheTag)
-  redirect(`/${countryCode}/cont/conectare`)
+  redirect(`/cont/conectare`)
 }
 
 /**
@@ -221,7 +221,6 @@ export async function loginPage(
 ): Promise<string | null> {
   const email = formData.get("email") as string
   const password = formData.get("password") as string
-  const countryCode = (formData.get("countryCode") as string) || "ro"
   const redirectTo = (formData.get("redirectTo") as string) || ""
 
   try {
@@ -235,7 +234,7 @@ export async function loginPage(
 
   await transferCart().catch(() => {})
 
-  redirect(redirectTo || `/${countryCode}/cont`)
+  redirect(redirectTo || `/cont`)
 }
 
 /**
@@ -248,7 +247,6 @@ export async function signupPage(
   formData: FormData
 ): Promise<string | null> {
   const password = formData.get("password") as string
-  const countryCode = (formData.get("countryCode") as string) || "ro"
   const redirectTo = (formData.get("redirectTo") as string) || ""
 
   const customerForm = {
@@ -282,7 +280,7 @@ export async function signupPage(
 
   await transferCart().catch(() => {})
 
-  redirect(redirectTo || `/${countryCode}/cont`)
+  redirect(redirectTo || `/cont`)
 }
 
 export async function transferCart() {

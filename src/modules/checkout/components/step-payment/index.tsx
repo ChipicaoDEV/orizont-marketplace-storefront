@@ -170,7 +170,7 @@ export default function StepPayment({ cart, availablePaymentMethods }: StepPayme
       <button
         type="button"
         onClick={() =>
-          router.push(`/${countryCode}/checkout?step=address&method=${deliveryMethod}`)
+          router.push(`/checkout?step=address&method=${deliveryMethod}`)
         }
         className="flex items-center gap-x-1.5 text-sm text-gray-400 hover:text-[#F27A1A] transition-colors w-fit"
       >

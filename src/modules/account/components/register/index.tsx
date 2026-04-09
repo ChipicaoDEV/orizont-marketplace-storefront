@@ -20,31 +20,32 @@ const Register = ({ setCurrentView }: Props) => {
       className="max-w-sm flex flex-col items-center"
       data-testid="register-page"
     >
-      <h1 className="text-large-semi uppercase mb-6">
-        Become a Medusa Store Member
+      <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">
+        Creează un cont
       </h1>
-      <p className="text-center text-base-regular text-ui-fg-base mb-4">
-        Create your Medusa Store Member profile, and get access to an enhanced
-        shopping experience.
+      <p className="text-center text-gray-500 text-sm mb-8 leading-relaxed">
+        Alătură-te <span className="font-semibold text-gray-900">Orizont</span> pentru o experiență de cumpărături simplificată.
       </p>
       <form className="w-full flex flex-col" action={formAction}>
-        <div className="flex flex-col w-full gap-y-2">
+        <div className="flex flex-col w-full gap-y-3">
+          <div className="grid grid-cols-2 gap-x-3">
+            <Input
+              label="Prenume"
+              name="first_name"
+              required
+              autoComplete="given-name"
+              data-testid="first-name-input"
+            />
+            <Input
+              label="Nume"
+              name="last_name"
+              required
+              autoComplete="family-name"
+              data-testid="last-name-input"
+            />
+          </div>
           <Input
-            label="First name"
-            name="first_name"
-            required
-            autoComplete="given-name"
-            data-testid="first-name-input"
-          />
-          <Input
-            label="Last name"
-            name="last_name"
-            required
-            autoComplete="family-name"
-            data-testid="last-name-input"
-          />
-          <Input
-            label="Email"
+            label="Adresă E-mail"
             name="email"
             required
             type="email"
@@ -52,14 +53,14 @@ const Register = ({ setCurrentView }: Props) => {
             data-testid="email-input"
           />
           <Input
-            label="Phone"
+            label="Telefon"
             name="phone"
             type="tel"
             autoComplete="tel"
             data-testid="phone-input"
           />
           <Input
-            label="Password"
+            label="Parolă"
             name="password"
             required
             type="password"
@@ -68,36 +69,35 @@ const Register = ({ setCurrentView }: Props) => {
           />
         </div>
         <ErrorMessage error={message} data-testid="register-error" />
-        <span className="text-center text-ui-fg-base text-small-regular mt-6">
-          By creating an account, you agree to Medusa Store&apos;s{" "}
+        <span className="text-center text-gray-400 text-[11px] mt-6 leading-relaxed">
+          Prin crearea unui cont, ești de acord cu{" "}
           <LocalizedClientLink
-            href="/content/privacy-policy"
-            className="underline"
+            href="/privacy-policy"
+            className="underline hover:text-gray-600"
           >
-            Privacy Policy
+            Politica de Confidențialitate
           </LocalizedClientLink>{" "}
-          and{" "}
+          și{" "}
           <LocalizedClientLink
-            href="/content/terms-of-use"
-            className="underline"
+            href="/terms-of-use"
+            className="underline hover:text-gray-600"
           >
-            Terms of Use
-          </LocalizedClientLink>
-          .
+            Termenii de Utilizare
+          </LocalizedClientLink>{" "}
+          Orizont.
         </span>
-        <SubmitButton className="w-full mt-6" data-testid="register-button">
-          Join
+        <SubmitButton className="w-full mt-6 bg-[#F27A1A] hover:bg-[#D4600E] text-white transition-all duration-200 h-12 rounded-2xl font-bold uppercase tracking-widest text-xs shadow-sm shadow-orange-100" data-testid="register-button">
+          Înregistrare
         </SubmitButton>
       </form>
-      <span className="text-center text-ui-fg-base text-small-regular mt-6">
-        Already a member?{" "}
+      <span className="text-center text-gray-500 text-sm font-medium mt-8">
+        Ai deja un cont?{" "}
         <button
           onClick={() => setCurrentView(LOGIN_VIEW.SIGN_IN)}
-          className="underline"
+          className="text-[#F27A1A] font-bold underline underline-offset-4 hover:text-[#D4600E] transition-colors"
         >
-          Sign in
+          Conectează-te
         </button>
-        .
       </span>
     </div>
   )

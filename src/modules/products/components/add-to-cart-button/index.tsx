@@ -30,7 +30,7 @@ const AddToCartButton = ({
   if (!variantId) {
     return (
       <a
-        href={`/${countryCode}/products/${productHandle}`}
+        href={`/products/${productHandle}`}
         className="
           w-full flex items-center justify-center
           px-4 py-2.5 rounded-lg text-sm font-semibold

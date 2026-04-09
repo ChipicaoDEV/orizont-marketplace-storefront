@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 const BACKEND_URL = process.env.MEDUSA_BACKEND_URL
 const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
-const DEFAULT_REGION = process.env.NEXT_PUBLIC_DEFAULT_REGION || "us"
+const DEFAULT_REGION = process.env.NEXT_PUBLIC_DEFAULT_REGION || "ro"
 
 const regionMapCache = {
   regionMap: new Map<string, HttpTypes.StoreRegion>(),
@@ -63,34 +63,23 @@ async function getRegionMap(cacheId: string) {
 }
 
 /**
- * Fetches regions from Medusa and sets the region cookie.
- * @param request
- * @param response
+ * Resolves the country code from the region map.
+ * Since this is a Romania-only store, we always resolve to "ro" (or
+ * whatever DEFAULT_REGION is configured to), without reading the URL path.
  */
 async function getCountryCode(
-  request: NextRequest,
   regionMap: Map<string, HttpTypes.StoreRegion | number>
-) {
+): Promise<string | undefined> {
   try {
-    let countryCode
-
-    const vercelCountryCode = request.headers
-      .get("x-vercel-ip-country")
-      ?.toLowerCase()
-
-    const urlCountryCode = request.nextUrl.pathname.split("/")[1]?.toLowerCase()
-
-    if (urlCountryCode && regionMap.has(urlCountryCode)) {
-      countryCode = urlCountryCode
-    } else if (vercelCountryCode && regionMap.has(vercelCountryCode)) {
-      countryCode = vercelCountryCode
-    } else if (regionMap.has(DEFAULT_REGION)) {
-      countryCode = DEFAULT_REGION
-    } else if (regionMap.keys().next().value) {
-      countryCode = regionMap.keys().next().value
+    if (regionMap.has(DEFAULT_REGION)) {
+      return DEFAULT_REGION
     }
 
-    return countryCode
+    // Fallback: use the first available country in any region
+    const firstKey = regionMap.keys().next().value
+    if (firstKey) {
+      return firstKey as string
+    }
   } catch (error) {
     if (process.env.NODE_ENV === "development") {
       console.error(
@@ -101,58 +90,67 @@ async function getCountryCode(
 }
 
 /**
- * Middleware to handle region selection and onboarding status.
+ * Middleware to handle region selection.
+ *
+ * This store serves Romania only. Instead of redirecting visitors to a
+ * /{countryCode}/... URL, we use Next.js URL rewrites so that the [countryCode]
+ * dynamic segment receives "ro" while the browser always sees clean URLs
+ * (e.g. /produse/..., /cos, /cont/...).
+ *
+ * If a URL already contains the country code prefix (e.g. /ro/cont from a
+ * server-side redirect), we strip it and redirect to the clean URL.
  */
 export async function middleware(request: NextRequest) {
-  let redirectUrl = request.nextUrl.href
-
-  let response = NextResponse.redirect(redirectUrl, 307)
-
-  let cacheIdCookie = request.cookies.get("_medusa_cache_id")
-
-  let cacheId = cacheIdCookie?.value || crypto.randomUUID()
-
-  const regionMap = await getRegionMap(cacheId)
-
-  const countryCode = regionMap && (await getCountryCode(request, regionMap))
-
-  const urlHasCountryCode =
-    countryCode && request.nextUrl.pathname.split("/")[1].includes(countryCode)
-
-  // if one of the country codes is in the url and the cache id is set, return next
-  if (urlHasCountryCode && cacheIdCookie) {
-    return NextResponse.next()
-  }
-
-  // if one of the country codes is in the url and the cache id is not set, set the cache id and redirect
-  if (urlHasCountryCode && !cacheIdCookie) {
-    response.cookies.set("_medusa_cache_id", cacheId, {
-      maxAge: 60 * 60 * 24,
-    })
-
-    return response
-  }
-
-  // check if the url is a static asset
+  // Skip static assets
   if (request.nextUrl.pathname.includes(".")) {
     return NextResponse.next()
   }
 
-  const redirectPath =
-    request.nextUrl.pathname === "/" ? "" : request.nextUrl.pathname
+  let cacheIdCookie = request.cookies.get("_medusa_cache_id")
+  let cacheId = cacheIdCookie?.value || crypto.randomUUID()
 
-  const queryString = request.nextUrl.search ? request.nextUrl.search : ""
+  const regionMap = await getRegionMap(cacheId)
+  const countryCode = regionMap && (await getCountryCode(regionMap))
 
-  // If no country code is set, we redirect to the relevant region.
-  if (!urlHasCountryCode && countryCode) {
-    redirectUrl = `${request.nextUrl.origin}/${countryCode}${redirectPath}${queryString}`
-    response = NextResponse.redirect(`${redirectUrl}`, 307)
-  } else if (!urlHasCountryCode && !countryCode) {
-    // Handle case where no valid country code exists (empty regions)
+  if (!countryCode) {
     return new NextResponse(
       "No valid regions configured. Please set up regions with countries in your Medusa Admin.",
       { status: 500 }
     )
+  }
+
+  const pathname = request.nextUrl.pathname
+  const queryString = request.nextUrl.search ?? ""
+
+  // If the URL already has the country code prefix, strip it and redirect so
+  // the browser always sees clean URLs (handles legacy links and server redirects).
+  if (
+    pathname === `/${countryCode}` ||
+    pathname.startsWith(`/${countryCode}/`)
+  ) {
+    const cleanPath = pathname.slice(countryCode.length + 1) || "/"
+    const cleanUrl = new URL(`${cleanPath}${queryString}`, request.url)
+    const response = NextResponse.redirect(cleanUrl, 308)
+    if (!cacheIdCookie) {
+      response.cookies.set("_medusa_cache_id", cacheId, { maxAge: 60 * 60 * 24 })
+    }
+    return response
+  }
+
+  // Rewrite the URL internally to /{countryCode}/... so that Next.js resolves
+  // the [countryCode] dynamic segment, but the browser URL remains unchanged.
+  const rewriteUrl = new URL(
+    `/${countryCode}${pathname === "/" ? "" : pathname}${queryString}`,
+    request.url
+  )
+
+  const response = NextResponse.rewrite(rewriteUrl)
+
+  // Persist the cache id cookie if it wasn't already set
+  if (!cacheIdCookie) {
+    response.cookies.set("_medusa_cache_id", cacheId, {
+      maxAge: 60 * 60 * 24,
+    })
   }
 
   return response

@@ -29,7 +29,7 @@ export default async function OrderDetailPage({ params }: Props) {
         <div className="flex items-start justify-between">
           <div>
             <Link
-              href={`/${countryCode}/cont/comenzi`}
+              href={`/cont/comenzi`}
               className="text-sm text-gray-400 hover:text-[#F27A1A] transition-colors flex items-center gap-x-1 mb-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -101,7 +101,7 @@ const SearchBar = () => {
 
   const navigate = (q: string) => {
     setIsOpen(false)
-    router.push(`/${countryCode}/cautare?q=${encodeURIComponent(q)}`)
+    router.push(`/cautare?q=${encodeURIComponent(q)}`)
   }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -110,7 +110,7 @@ const SearchBar = () => {
     if (trimmed) navigate(trimmed)
   }
 
-  const searchUrl = `/${countryCode}/cautare?q=${encodeURIComponent(query.trim())}`
+  const searchUrl = `/cautare?q=${encodeURIComponent(query.trim())}`
 
   return (
     <div ref={containerRef} className="relative w-full">
@@ -201,7 +201,7 @@ const SearchBar = () => {
                   return (
                     <li key={product.id}>
                       <a
-                        href={`/${countryCode}/products/${product.handle}`}
+                        href={`/products/${product.handle}`}
                         className="flex items-center gap-x-3 px-4 py-3 hover:bg-gray-50 transition-colors"
                         onClick={() => setIsOpen(false)}
                       >

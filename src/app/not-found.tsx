@@ -1,29 +1,32 @@
-import { ArrowUpRightMini } from "@medusajs/icons"
-import { Text } from "@medusajs/ui"
 import { Metadata } from "next"
 import Link from "next/link"
 
 export const metadata: Metadata = {
   title: "404",
-  description: "Something went wrong",
+  description: "Ceva nu a mers bine",
 }
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col gap-4 items-center justify-center min-h-[calc(100vh-64px)]">
-      <h1 className="text-2xl-semi text-ui-fg-base">Page not found</h1>
-      <p className="text-small-regular text-ui-fg-base">
-        The page you tried to access does not exist.
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] px-4 text-center">
+      <div className="w-20 h-20 rounded-full bg-[#FFF3E6] flex items-center justify-center mb-6">
+        <svg className="w-10 h-10 text-[#F27A1A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+
+      <p className="text-[#F27A1A] text-xs uppercase tracking-wider mb-2">Eroare 404</p>
+      <h1 className="text-3xl font-semibold text-[#1A1A1A] mb-3">Pagina nu a fost găsită</h1>
+      <p className="text-gray-500 max-w-sm mb-8">
+        Pagina pe care ai încercat să o accesezi nu există sau a fost mutată.
       </p>
+
       <Link
-        className="flex gap-x-1 items-center group"
         href="/"
+        className="px-8 py-3 bg-[#F27A1A] hover:bg-[#D4600E] text-white font-medium rounded-xl transition-colors duration-200 text-sm"
       >
-        <Text className="text-ui-fg-interactive">Go to frontpage</Text>
-        <ArrowUpRightMini
-          className="group-hover:rotate-45 ease-in-out duration-150"
-          color="var(--fg-interactive)"
-        />
+        Mergi la pagina principală
       </Link>
     </div>
   )
