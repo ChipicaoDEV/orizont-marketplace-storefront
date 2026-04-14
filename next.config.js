@@ -7,6 +7,7 @@ checkEnvVariables()
  */
 const S3_HOSTNAME = process.env.MEDUSA_CLOUD_S3_HOSTNAME
 const S3_PATHNAME = process.env.MEDUSA_CLOUD_S3_PATHNAME
+const BACKEND_HOSTNAME = process.env.MEDUSA_BACKEND_HOSTNAME
 
 /**
  * @type {import('next').NextConfig}
@@ -30,10 +31,7 @@ const nextConfig = {
         protocol: "http",
         hostname: "localhost",
       },
-      {
-        protocol: "http",
-        hostname: "fqfaejv88z1muv4ktpc99aho.37.27.246.44.sslip.io",
-      },
+      ...(BACKEND_HOSTNAME ? [{ protocol: "https", hostname: BACKEND_HOSTNAME }] : []),
       {
         protocol: "https",
         hostname: "medusa-public-images.s3.eu-west-1.amazonaws.com",
