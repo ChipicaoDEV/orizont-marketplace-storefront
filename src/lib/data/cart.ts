@@ -517,7 +517,7 @@ export async function saveDeliveryInfo(
     const billingParts = billingFullName.split(/\s+/)
     billingAddress = {
       first_name: billingParts[0] ?? "",
-      last_name: billingParts.slice(1).join(" ") || billingParts[0] ?? "",
+      last_name: (billingParts.slice(1).join(" ") || billingParts[0]) ?? "",
       address_1: (formData.get("billing_address_1") as string | null) ?? "",
       address_2: (formData.get("billing_cui") as string | null) ?? "",
       company: (formData.get("billing_company") as string | null) ?? "",
