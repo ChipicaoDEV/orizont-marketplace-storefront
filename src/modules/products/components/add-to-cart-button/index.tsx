@@ -64,7 +64,7 @@ const AddToCartButton = ({
           cartItemCount
         )
       } catch (e: any) {
-        setError(e?.message ?? Produsul nu mai este disponibil.)
+        setError(e?.message ?? "Produsul nu mai este disponibil.")
       }
     })
   }
