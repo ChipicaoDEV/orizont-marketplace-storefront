@@ -61,7 +61,7 @@ function getImagesForVariant(
   }
 
   const variant = product.variants!.find((v) => v.id === selectedVariantId)
-  if (!variant || !variant.images.length) {
+  if (!variant || !variant.images?.length) {
     return product.images
   }
 
@@ -121,7 +121,7 @@ export default async function ProductPage(props: Props) {
     queryParams: {
       handle: params.handle,
       fields:
-        "*variants.calculated_price,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder,*variants.images,+metadata,+tags,+categories",
+        "*variants.calculated_price,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder,+metadata,+tags,+categories",
     },
   }).then(({ response }) => response.products[0])
 
