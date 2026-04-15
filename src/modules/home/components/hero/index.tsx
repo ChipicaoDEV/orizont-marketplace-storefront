@@ -33,7 +33,7 @@ const PROMO_TILES = [
     tag: "PROMOȚIE",
     title: "Marea Curățenie",
     subtitle: "Până la -30%",
-    link: "/collections/cleaning",
+    link: "/collections/marea-curatenie",
     className: "bg-gradient-to-br from-[#F27A1A] to-[#E65100] border-transparent shadow-lg shadow-orange-100/50",
     textClassName: "text-white",
     icon: (
@@ -47,7 +47,7 @@ const PROMO_TILES = [
     tag: "NOUTĂȚI",
     title: "Noutăți Sezoniere",
     subtitle: "Vezi colecția 2026",
-    link: "/products",
+    link: "/collections/noutati",
     className: "bg-gradient-to-br from-[#1E293B] to-[#0F172A] border-transparent shadow-lg shadow-slate-200/50",
     textClassName: "text-white",
     icon: (

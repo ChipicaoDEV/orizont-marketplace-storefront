@@ -1,3 +1,4 @@
+import { getCollectionByHandle } from "@lib/data/collections"
 import { listProducts } from "@lib/data/products"
 import { HttpTypes } from "@medusajs/types"
 import ProductCard from "@modules/products/components/product-card"
@@ -8,6 +9,8 @@ type PopularProductsProps = {
 }
 
 const PopularProducts = async ({ region }: PopularProductsProps) => {
+  const collection = await getCollectionByHandle("produse-populare").catch(() => null)
+
   const {
     response: { products },
   } = await listProducts({
@@ -16,6 +19,7 @@ const PopularProducts = async ({ region }: PopularProductsProps) => {
       limit: 8,
       fields:
         "*variants.calculated_price,+variants.inventory_quantity,+metadata",
+      ...(collection ? { collection_id: collection.id } : {}),
     },
   }).catch(() => ({ response: { products: [] as HttpTypes.StoreProduct[], count: 0 } }))
 
