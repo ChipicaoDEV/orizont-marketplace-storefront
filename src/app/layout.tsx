@@ -11,6 +11,12 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),
+  title: {
+    default: "Orizont — Materiale de construcții",
+    template: "%s | Orizont",
+  },
+  description:
+    "Depozit de materiale de construcții. Ciment, cărămizi, izolații, acoperiș, oțel și multe altele. Livrare rapidă, prețuri competitive.",
 }
 
 export default function RootLayout(props: { children: React.ReactNode }) {
