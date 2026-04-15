@@ -23,6 +23,7 @@ const AddToCartButton = ({
   productPrice = null,
 }: AddToCartButtonProps) => {
   const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
   const { countryCode } = useParams() as { countryCode: string }
   const { openDrawer } = useCartDrawer()
 
@@ -46,24 +47,33 @@ const AddToCartButton = ({
 
   const handleAdd = () => {
     if (disabled || isPending) return
+    setError(null)
     startTransition(async () => {
-      await addToCart({ variantId, quantity: 1, countryCode })
-      const cart = await retrieveCart()
-      const cartItemCount = cart?.items?.reduce((s, i) => s + i.quantity, 0) ?? 0
-      openDrawer(
-        {
-          title: productTitle,
-          thumbnail: productThumbnail,
-          price: productPrice,
-          quantity: 1,
-        },
-        cart?.total ?? null,
-        cartItemCount
-      )
+      try {
+        await addToCart({ variantId, quantity: 1, countryCode })
+        const cart = await retrieveCart()
+        const cartItemCount = cart?.items?.reduce((s, i) => s + i.quantity, 0) ?? 0
+        openDrawer(
+          {
+            title: productTitle,
+            thumbnail: productThumbnail,
+            price: productPrice,
+            quantity: 1,
+          },
+          cart?.total ?? null,
+          cartItemCount
+        )
+      } catch (e: any) {
+        setError(e?.message ?? Produsul nu mai este disponibil.)
+      }
     })
   }
 
   return (
+    <>
+    {error && (
+      <p className=text-red-500 text-xs text-center mb-1>{error}</p>
+    )}
     <button
       onClick={handleAdd}
       disabled={disabled || isPending}
@@ -119,6 +129,7 @@ const AddToCartButton = ({
         </>
       )}
     </button>
+    </>
   )
 }
 
