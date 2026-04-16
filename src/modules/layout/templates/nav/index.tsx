@@ -96,8 +96,10 @@ export default async function Nav() {
           </div>
         </header>
 
-        {/* ── Row 3: Category navigation (with mega-menu) ── */}
-        <CategoryNav />
+        {/* ── Row 3: Category navigation (with mega-menu) — desktop only ── */}
+        <div className="hidden md:block">
+          <CategoryNav />
+        </div>
       </div>
     </div>
   )

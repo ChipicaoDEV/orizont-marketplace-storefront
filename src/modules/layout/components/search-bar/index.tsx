@@ -126,7 +126,7 @@ const SearchBar = () => {
           }}
           placeholder="Caută produse..."
           autoComplete="off"
-          className="w-full h-10 pl-4 pr-11 rounded-full border border-gray-300 bg-[#F5F5F5] text-sm text-[#333333] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F27A1A] focus:border-transparent transition-colors duration-150"
+          className="w-full h-10 pl-4 pr-11 rounded-full border border-gray-300 bg-[#F5F5F5] text-base md:text-sm text-[#333333] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F27A1A] focus:border-transparent transition-colors duration-150"
         />
         <button
           type="submit"
