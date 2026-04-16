@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { HttpTypes } from "@medusajs/types"
 import { submitQuoteRequest } from "@lib/data/quote-requests"
+import { Turnstile } from "@marsidev/react-turnstile"
 
 type Props = {
   product: HttpTypes.StoreProduct
@@ -23,9 +24,17 @@ export default function CereOfertaForm({ product, selectedVariantId }: Props) {
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileRef = useRef<any>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!turnstileToken) {
+      setError("Te rugăm să completezi verificarea de securitate.")
+      return
+    }
+
     setSubmitting(true)
     setError(null)
 
@@ -39,10 +48,14 @@ export default function CereOfertaForm({ product, selectedVariantId }: Props) {
       phone: phone.trim(),
       email: email.trim(),
       address: delivery === "livrare" ? address.trim() || null : null,
+      turnstileToken,
     })
 
     if ("error" in result) {
       setError(result.error)
+      // Reset turnstile so user can try again
+      setTurnstileToken(null)
+      turnstileRef.current?.reset()
     } else {
       setSuccess(true)
     }
@@ -198,6 +211,17 @@ export default function CereOfertaForm({ product, selectedVariantId }: Props) {
             />
           </div>
 
+          {/* Turnstile */}
+          <div className="flex justify-center pt-1">
+            <Turnstile
+              ref={turnstileRef}
+              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+              onSuccess={(token) => setTurnstileToken(token)}
+              onExpire={() => setTurnstileToken(null)}
+              onError={() => setTurnstileToken(null)}
+            />
+          </div>
+
           {/* Error */}
           {error && (
             <p className="text-sm text-red-600 bg-red-50 border border-red-100 px-3 py-2 rounded-lg">
@@ -208,7 +232,7 @@ export default function CereOfertaForm({ product, selectedVariantId }: Props) {
           {/* Submit */}
           <button
             type="submit"
-            disabled={submitting}
+            disabled={submitting || !turnstileToken}
             className="w-full h-11 flex items-center justify-center gap-x-2 rounded-xl text-sm font-semibold bg-[#F27A1A] hover:bg-[#D4600E] text-white transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed mt-1"
           >
             {submitting ? (
