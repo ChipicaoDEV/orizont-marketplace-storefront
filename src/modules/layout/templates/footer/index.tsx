@@ -151,11 +151,11 @@ export default function Footer() {
               <ul className="flex flex-col gap-y-2 text-sm text-gray-400">
                 <li className="flex justify-between gap-x-4">
                   <span>Luni–Vineri</span>
-                  <span className="text-white font-medium">07:00–18:00</span>
+                  <span className="text-white font-medium">08:00–17:00</span>
                 </li>
                 <li className="flex justify-between gap-x-4">
                   <span>Sâmbătă</span>
-                  <span className="text-white font-medium">08:00–14:00</span>
+                  <span className="text-white font-medium">08:00–13:00</span>
                 </li>
                 <li className="flex justify-between gap-x-4">
                   <span>Duminică</span>

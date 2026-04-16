@@ -61,7 +61,7 @@ const TopBar = () => {
               d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <span>Luni–Vineri: 07:00–18:00&nbsp;&nbsp;|&nbsp;&nbsp;Sâmbătă: 08:00–14:00</span>
+          <span>Luni–Vineri: 08:00–17:00&nbsp;&nbsp;|&nbsp;&nbsp;Sâmbătă: 08:00–13:00</span>
         </div>
       </div>
     </div>

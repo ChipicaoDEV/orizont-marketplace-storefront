@@ -52,7 +52,7 @@ const CONTACT_ROWS = [
     ),
   },
   {
-    label: "Director executiv",
+    label: "Director Financiar",
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
@@ -76,6 +76,20 @@ const CONTACT_ROWS = [
     content: (
       <a href="mailto:office@orizont-srl.ro" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
         office@orizont-srl.ro
+      </a>
+    ),
+  },
+  {
+    label: "Asistență tehnică",
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+    ),
+    content: (
+      <a href="mailto:oliver@orizont-srl.ro" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
+        oliver@orizont-srl.ro
       </a>
     ),
   },
@@ -137,8 +151,8 @@ export default function ContactPage() {
                 </h2>
               </div>
               {[
-                { day: "Luni – Vineri", hours: "07:00 – 18:00", open: true },
-                { day: "Sâmbătă", hours: "08:00 – 14:00", open: true },
+                { day: "Luni – Vineri", hours: "08:00 – 17:00", open: true },
+                { day: "Sâmbătă", hours: "08:00 – 13:00", open: true },
                 { day: "Duminică", hours: "Închis", open: false },
               ].map(({ day, hours, open }) => (
                 <div key={day} className="flex items-center justify-between px-5 py-3 border-b border-gray-50 last:border-b-0">
