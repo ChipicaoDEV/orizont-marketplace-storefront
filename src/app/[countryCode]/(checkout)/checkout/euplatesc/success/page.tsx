@@ -1,15 +1,20 @@
 import { redirect } from "next/navigation"
 import { Metadata } from "next"
 import { retrieveCart, initiatePaymentSession, placeOrder } from "@lib/data/cart"
+import { removeCartId } from "@lib/data/cookies"
+import { getEuplatescOrderId } from "@lib/data/euplatesc"
 
 export const metadata: Metadata = {
   title: "Procesare plată | Orizont",
 }
 
-// EuPlătesc returns these GET params on the back_ref redirect.
-// Note: EuPlătesc replaces (not appends to) the back_ref query string,
-// so cart_id from our original back_ref URL is lost. We reconstruct it
-// from invoice_id which is always echoed back by EuPlătesc.
+/**
+ * EuPlătesc returns these GET params on the back_ref redirect.
+ *
+ * Note: EuPlătesc replaces (not appends to) the back_ref query string,
+ * so cart_id from our original back_ref URL is lost. We reconstruct it
+ * from invoice_id which is always echoed back.
+ */
 type EpParams = {
   cart_id?: string
   amount?: string
@@ -34,10 +39,11 @@ export default async function EuplatescSuccessPage({ params, searchParams }: Pro
   const { countryCode } = await params
   const sp = await searchParams
 
-  // Prefer cart_id if somehow present, otherwise reconstruct from invoice_id
+  // Prefer cart_id if somehow present; otherwise reconstruct from invoice_id
   const cartId = sp.cart_id ?? (sp.invoice_id ? `cart_${sp.invoice_id}` : null)
+  const invoiceId = sp.invoice_id ?? sp.cart_id?.replace(/^cart_/, "") ?? null
 
-  if (!cartId) {
+  if (!cartId || !invoiceId) {
     redirect(`/${countryCode}/checkout?step=payment`)
   }
 
@@ -49,28 +55,48 @@ export default async function EuplatescSuccessPage({ params, searchParams }: Pro
     )
   }
 
-  const cart = await retrieveCart(cartId)
+  // ── Primary path: IPN already placed the order ────────────────────────────
+  // The IPN handler fires before EuPlătesc shows its receipt page, so by the
+  // time the browser arrives here (after the 5-second countdown) the order
+  // should already exist. If found, redirect straight to order confirmation.
+  const existingOrderId = await getEuplatescOrderId(invoiceId!)
+
+  if (existingOrderId) {
+    await removeCartId()
+    redirect(`/order/${existingOrderId}/confirmed`)
+  }
+
+  // ── Fallback path: IPN failed or hasn't fired yet ────────────────────────
+  // Initiate the payment session and complete the cart here. This handles
+  // edge cases such as IPN network timeouts or transient backend errors.
+  const cart = await retrieveCart(cartId!)
 
   if (!cart) {
     redirect(`/${countryCode}/checkout?step=payment`)
   }
 
-  // Initiate payment session — ignore errors if already initiated
-  await initiatePaymentSession(cart, { provider_id: "pp_system_default" }).catch(() => {})
+  // Ignore errors — the IPN may have already initiated the session
+  await initiatePaymentSession(cart!, { provider_id: "pp_system_default" }).catch(() => {})
 
   try {
-    await placeOrder(cartId)
-    // placeOrder returned without redirecting → cart complete failed
+    // placeOrder calls sdk.store.cart.complete() which, on success, calls
+    // redirect('/order/{id}/confirmed') internally — so it never returns normally.
+    await placeOrder(cartId!)
+
+    // If we reach here, cart.complete() returned without redirecting — unexpected.
     redirect(
-      `/${countryCode}/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent("Comanda nu a putut fi finalizată. Contactează-ne.")}`
+      `/${countryCode}/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent(
+        "Comanda nu a putut fi finalizată. Contactează-ne."
+      )}`
     )
   } catch (e: any) {
-    // Next.js redirect() and notFound() throw objects with a `digest` field.
-    // Always rethrow these — they are navigation signals, not errors.
+    // Next.js redirect() throws an object with a `digest` field — always rethrow.
     if (e?.digest) throw e
 
     redirect(
-      `/${countryCode}/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent("Eroare la finalizarea comenzii. Contactează-ne.")}`
+      `/${countryCode}/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent(
+        "Eroare la finalizarea comenzii. Contactează-ne."
+      )}`
     )
   }
 }

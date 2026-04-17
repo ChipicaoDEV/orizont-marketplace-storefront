@@ -3,6 +3,25 @@
 import { sdk } from "@lib/config"
 import { getAuthHeaders, getCartId } from "./cookies"
 
+/**
+ * Checks whether the EuPlătesc IPN handler has already placed an order for
+ * the given invoice_id (the ULID part of cart_<ULID>).
+ *
+ * Returns the Medusa order ID if found, or null if the order does not exist
+ * yet (IPN hasn't fired or failed silently).
+ */
+export async function getEuplatescOrderId(invoiceId: string): Promise<string | null> {
+  const headers = { ...(await getAuthHeaders()) }
+
+  return sdk.client
+    .fetch<{ order_id: string | null }>(
+      `/store/euplatesc/order?invoice_id=${encodeURIComponent(invoiceId)}`,
+      { method: "GET", headers }
+    )
+    .then((r) => r.order_id ?? null)
+    .catch(() => null)
+}
+
 export type EuplatescFormData = {
   action_url: string
   // Open record — backend can add ExtraData fields and billing pre-fill
