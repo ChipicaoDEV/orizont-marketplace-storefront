@@ -4,6 +4,7 @@ import { listRegions } from "@lib/data/regions"
 import { listLocales } from "@lib/data/locales"
 import { getLocale } from "@lib/data/locale-actions"
 import { retrieveCustomer } from "@lib/data/customer"
+import { listCategories } from "@lib/data/categories"
 import { StoreRegion } from "@medusajs/types"
 
 import Image from "next/image"
@@ -16,11 +17,12 @@ import NavAccountDropdown from "@modules/layout/components/nav-account-dropdown"
 import SideMenu from "@modules/layout/components/side-menu"
 
 export default async function Nav() {
-  const [regions, locales, currentLocale, customer] = await Promise.all([
+  const [regions, locales, currentLocale, customer, categories] = await Promise.all([
     listRegions().then((r: StoreRegion[]) => r),
     listLocales(),
     getLocale(),
     retrieveCustomer().catch(() => null),
+    listCategories().catch(() => []),
   ])
 
   return (
@@ -98,7 +100,7 @@ export default async function Nav() {
 
         {/* ── Row 3: Category navigation (with mega-menu) — desktop only ── */}
         <div className="hidden md:block">
-          <CategoryNav />
+          <CategoryNav categories={categories} />
         </div>
       </div>
     </div>
