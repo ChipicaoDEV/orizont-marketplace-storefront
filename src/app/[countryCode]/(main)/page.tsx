@@ -4,6 +4,7 @@ import Hero from "@modules/home/components/hero"
 import CategoriesSection from "@modules/home/components/categories-section"
 import PopularProducts from "@modules/home/components/popular-products"
 import { getRegion } from "@lib/data/regions"
+import { listCategories } from "@lib/data/categories"
 
 export const metadata: Metadata = {
   title: "Orizont — Materiale de construcții",
@@ -18,7 +19,10 @@ export default async function Home(props: {
 
   const { countryCode } = params
 
-  const region = await getRegion(countryCode)
+  const [region, categories] = await Promise.all([
+    getRegion(countryCode),
+    listCategories().catch(() => []),
+  ])
 
   if (!region) {
     return null
@@ -27,7 +31,7 @@ export default async function Home(props: {
   return (
     <>
       <Hero />
-      <CategoriesSection />
+      <CategoriesSection categories={categories} />
       <PopularProducts region={region} />
     </>
   )
