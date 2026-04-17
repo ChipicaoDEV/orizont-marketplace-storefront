@@ -7,7 +7,10 @@ export const metadata: Metadata = {
   title: "Procesare plată | Orizont",
 }
 
-// EuPlătesc returns these GET params on the back_ref redirect
+// EuPlătesc returns these GET params on the back_ref redirect.
+// Note: EuPlătesc replaces (not appends to) the back_ref query string,
+// so cart_id from our original back_ref URL is lost. We reconstruct it
+// from invoice_id which is always echoed back by EuPlătesc.
 type EpParams = {
   cart_id?: string
   amount?: string
@@ -28,31 +31,22 @@ type Props = {
   searchParams: Promise<EpParams>
 }
 
-/**
- * /checkout/euplatesc/success
- *
- * EuPlătesc redirects the customer here after a payment attempt.
- * We check the `action` code, then complete the Medusa order.
- *
- * Note: Full HMAC verification of the response hash requires the EUPLATESC_KEY
- * on the server. For now we rely on the `action` field and the backend IPN for
- * authoritative payment confirmation.
- */
 export default async function EuplatescSuccessPage({ params, searchParams }: Props) {
   const { countryCode } = await params
   const sp = await searchParams
 
-  const cartId = sp.cart_id
+  // Prefer cart_id if somehow present, otherwise reconstruct from invoice_id
+  const cartId = sp.cart_id ?? (sp.invoice_id ? `cart_${sp.invoice_id}` : null)
 
   if (!cartId) {
-    redirect(`/checkout?step=payment`)
+    redirect(`/${countryCode}/checkout?step=payment`)
   }
 
   // EuPlătesc signals success with action="0"
   if (sp.action !== "0") {
     const msg = sp.message ? encodeURIComponent(sp.message) : ""
     redirect(
-      `/checkout/euplatesc/fail?cart_id=${cartId}${msg ? `&message=${msg}` : ""}`
+      `/${countryCode}/checkout/euplatesc/fail?cart_id=${cartId}${msg ? `&message=${msg}` : ""}`
     )
   }
 
@@ -60,30 +54,23 @@ export default async function EuplatescSuccessPage({ params, searchParams }: Pro
   const cart = await retrieveCart(cartId)
 
   if (!cart) {
-    redirect(`/checkout?step=payment`)
+    redirect(`/${countryCode}/checkout?step=payment`)
   }
 
-  // Initiate payment session (system_default = manual/COD-style capture).
-  // This marks the payment as "initiated" in Medusa before completing the cart.
-  // Ignore errors in case a session was already initiated.
+  // Initiate payment session then complete the cart → creates the Medusa order.
+  // Ignore initiatePaymentSession errors in case a session was already initiated.
   await initiatePaymentSession(cart, { provider_id: "pp_system_default" }).catch(() => {})
 
-  // Complete the cart → creates the Medusa order.
-  // placeOrder() calls redirect() internally on success (NEXT_REDIRECT throw).
-  // We catch it and rethrow so Next.js can handle the navigation.
   try {
     await placeOrder(cartId)
-    // placeOrder returns the cart object if the order was not created.
-    // Redirect to fail page in that case.
+    // placeOrder returns without redirecting if order was not created
     redirect(
-      `/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent("Comanda nu a putut fi finalizată. Contactează-ne.")}`
+      `/${countryCode}/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent("Comanda nu a putut fi finalizată. Contactează-ne.")}`
     )
   } catch (e) {
-    // Rethrow Next.js redirect errors so the navigation continues
     if (isRedirectError(e)) throw e
-
     redirect(
-      `/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent("Eroare la finalizarea comenzii. Contactează-ne.")}`
+      `/${countryCode}/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent("Eroare la finalizarea comenzii. Contactează-ne.")}`
     )
   }
 }
