@@ -1,4 +1,3 @@
-import { isRedirectError } from "next/dist/client/components/redirect-error"
 import { redirect } from "next/navigation"
 import { Metadata } from "next"
 import { retrieveCart, initiatePaymentSession, placeOrder } from "@lib/data/cart"
@@ -50,25 +49,26 @@ export default async function EuplatescSuccessPage({ params, searchParams }: Pro
     )
   }
 
-  // Retrieve cart
   const cart = await retrieveCart(cartId)
 
   if (!cart) {
     redirect(`/${countryCode}/checkout?step=payment`)
   }
 
-  // Initiate payment session then complete the cart → creates the Medusa order.
-  // Ignore initiatePaymentSession errors in case a session was already initiated.
+  // Initiate payment session — ignore errors if already initiated
   await initiatePaymentSession(cart, { provider_id: "pp_system_default" }).catch(() => {})
 
   try {
     await placeOrder(cartId)
-    // placeOrder returns without redirecting if order was not created
+    // placeOrder returned without redirecting → cart complete failed
     redirect(
       `/${countryCode}/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent("Comanda nu a putut fi finalizată. Contactează-ne.")}`
     )
-  } catch (e) {
-    if (isRedirectError(e)) throw e
+  } catch (e: any) {
+    // Next.js redirect() and notFound() throw objects with a `digest` field.
+    // Always rethrow these — they are navigation signals, not errors.
+    if (e?.digest) throw e
+
     redirect(
       `/${countryCode}/checkout/euplatesc/fail?cart_id=${cartId}&message=${encodeURIComponent("Eroare la finalizarea comenzii. Contactează-ne.")}`
     )
