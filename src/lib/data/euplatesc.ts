@@ -5,18 +5,9 @@ import { getAuthHeaders, getCartId } from "./cookies"
 
 export type EuplatescFormData = {
   action_url: string
-  form_fields: {
-    amount: string
-    curr: string
-    invoice_id: string
-    order_desc: string
-    merch_id: string
-    timestamp: string
-    nonce: string
-    fp_hash: string
-    back_ref: string
-    cancel_back_ref: string
-  }
+  // Open record — backend can add ExtraData fields and billing pre-fill
+  // without requiring storefront type changes each time.
+  form_fields: Record<string, string>
 }
 
 /**
