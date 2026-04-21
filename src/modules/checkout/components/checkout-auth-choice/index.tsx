@@ -16,7 +16,7 @@ export default function CheckoutAuthChoice() {
           </p>
         </div>
 
-        <LocalizedClientLink href="/cont/conectare?redirectTo=/checkout?step=delivery">
+        <LocalizedClientLink href={`/cont/conectare?redirectTo=${encodeURIComponent("/checkout?step=delivery")}`}>
           <button className="w-full h-12 bg-[#F27A1A] hover:bg-[#D4600E] text-white font-semibold rounded-xl transition-colors duration-150">
             Intră în cont
           </button>
