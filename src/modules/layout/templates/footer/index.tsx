@@ -16,9 +16,9 @@ const INFO_LINKS = [
 ]
 
 const ACCOUNT_LINKS = [
-  { label: "Conectare", href: "/account" },
-  { label: "Înregistrare", href: "/account" },
-  { label: "Comenzile mele", href: "/account/orders" },
+  { label: "Conectare", href: "/cont/conectare" },
+  { label: "Înregistrare", href: "/cont/inregistrare" },
+  { label: "Comenzile mele", href: "/cont/comenzi" },
 ]
 
 export default function Footer() {

@@ -30,7 +30,7 @@ const Overview = ({ customer, orders }: OverviewProps) => {
             <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">Vizualizează achizițiile tale recente</p>
           </div>
           <LocalizedClientLink
-            href="/account/orders"
+            href="/cont/comenzi"
             className="flex items-center gap-x-2 text-xs font-bold text-gray-400 hover:text-black transition-colors uppercase tracking-widest"
             data-testid="orders-link"
           >
@@ -43,7 +43,7 @@ const Overview = ({ customer, orders }: OverviewProps) => {
             orders.slice(0, 5).map((order) => {
               return (
                 <li key={order.id} data-testid="order-wrapper">
-                  <LocalizedClientLink href={`/account/orders/details/${order.id}`}>
+                  <LocalizedClientLink href={`/cont/comenzi/${order.id}`}>
                     <Container className="bg-white border border-gray-100 hover:border-gray-900 hover:shadow-2xl hover:shadow-gray-200/50 transition-all duration-500 rounded-[2rem] p-8 flex flex-col small:flex-row justify-between items-center gap-6 group">
                       <div className="grid grid-cols-2 small:grid-cols-4 gap-8 flex-1 w-full">
                         <div className="flex flex-col gap-y-1">

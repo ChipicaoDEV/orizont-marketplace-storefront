@@ -104,7 +104,7 @@ const CATEGORIES = [
 const NAV_LINKS = [
   { label: "Acasă", href: "/" },
   { label: "Toate produsele", href: "/store" },
-  { label: "Contul meu", href: "/account" },
+  { label: "Contul meu", href: "/cont" },
   { label: "Coș", href: "/cart" },
 ]
 

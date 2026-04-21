@@ -140,7 +140,7 @@ export async function signout(countryCode: string) {
   const cartCacheTag = await getCacheTag("carts")
   revalidateTag(cartCacheTag)
 
-  redirect(`/account`)
+  redirect(`/cont/conectare`)
 }
 
 // ── Romanian error translation ────────────────────────────────────────────────

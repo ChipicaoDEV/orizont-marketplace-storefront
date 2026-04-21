@@ -231,8 +231,12 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
   const [useDifferentBilling, setUseDifferentBilling] = useState(false)
   const [billingCompany, setBillingCompany] = useState(false)
 
+  // Saved address selector
+  const savedAddresses = customer?.addresses ?? []
+  const [selectedAddrId, setSelectedAddrId] = useState<string>("")
+
   const addr = cart?.shipping_address
-  const pre = customer?.addresses?.[0]
+  const pre = savedAddresses.find((a) => a.id === selectedAddrId) ?? savedAddresses[0] ?? null
 
   const defFullName =
     addr?.first_name
@@ -313,11 +317,35 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
         </div>
       </div>
 
+      {savedAddresses.length > 0 && (
+        <div className="flex flex-col gap-y-1.5">
+          <label htmlFor="saved_addr_select" className="text-sm font-medium text-[#333333]">
+            Adresă salvată
+          </label>
+          <select
+            id="saved_addr_select"
+            value={selectedAddrId}
+            onChange={(e) => setSelectedAddrId(e.target.value)}
+            className="h-10 px-3 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#F27A1A] focus:border-transparent"
+          >
+            <option value="">Adresă nouă</option>
+            {savedAddresses.map((a) => (
+              <option key={a.id} value={a.id ?? ""}>
+                {[a.first_name, a.last_name].filter(Boolean).join(" ")}
+                {a.address_1 ? ` — ${a.address_1}` : ""}
+                {a.city ? `, ${a.city}` : ""}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       <h2 className="text-lg font-bold text-[#1A1A1A]">{formTitle}</h2>
 
       {/* ── Pickup: standard address fields with company toggle ─────────────── */}
       {isPickup && (
         <AddressFields
+          key={selectedAddrId || "new"}
           addr={addr}
           pre={pre}
           defFullName={defFullName}
@@ -332,6 +360,7 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
       {!isPickup && (
         <>
           <AddressFields
+            key={selectedAddrId || "new"}
             addr={addr}
             pre={pre}
             defFullName={defFullName}

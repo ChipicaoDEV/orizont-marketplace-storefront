@@ -31,9 +31,9 @@ const AccountNav = ({
   return (
     <div>
       <div className="small:hidden" data-testid="mobile-account-nav">
-        {route !== `/account` ? (
+        {route !== `/cont` ? (
           <LocalizedClientLink
-            href="/account"
+            href="/cont"
             className="flex items-center gap-x-2 text-small-regular py-2"
             data-testid="account-main-link"
           >
@@ -51,7 +51,7 @@ const AccountNav = ({
               <ul>
                 <li>
                   <LocalizedClientLink
-                    href="/account/profile"
+                    href="/cont/informatii"
                     className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
                     data-testid="profile-link"
                   >
@@ -66,7 +66,7 @@ const AccountNav = ({
                 </li>
                 <li>
                   <LocalizedClientLink
-                    href="/account/addresses"
+                    href="/cont/adrese"
                     className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
                     data-testid="addresses-link"
                   >
@@ -81,7 +81,7 @@ const AccountNav = ({
                 </li>
                 <li>
                   <LocalizedClientLink
-                    href="/account/orders"
+                    href="/cont/comenzi"
                     className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
                     data-testid="orders-link"
                   >
@@ -122,7 +122,7 @@ const AccountNav = ({
           <ul className="flex flex-col gap-y-2 text-sm font-semibold mt-6">
             <li>
               <AccountNavLink
-                href="/account"
+                href="/cont"
                 route={route!}
                 icon={<SquaresPlus />}
                 data-testid="overview-link"
@@ -132,7 +132,7 @@ const AccountNav = ({
             </li>
             <li>
               <AccountNavLink
-                href="/account/profile"
+                href="/cont/informatii"
                 route={route!}
                 icon={<User />}
                 data-testid="profile-link"
@@ -142,7 +142,7 @@ const AccountNav = ({
             </li>
             <li>
               <AccountNavLink
-                href="/account/addresses"
+                href="/cont/adrese"
                 route={route!}
                 icon={<MapPin />}
                 data-testid="addresses-link"
@@ -152,7 +152,7 @@ const AccountNav = ({
             </li>
             <li>
               <AccountNavLink
-                href="/account/orders"
+                href="/cont/comenzi"
                 route={route!}
                 icon={<Package />}
                 data-testid="orders-link"

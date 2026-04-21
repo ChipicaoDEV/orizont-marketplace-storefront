@@ -23,7 +23,7 @@ const OrderDetailsTemplate: React.FC<OrderDetailsTemplateProps> = ({
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-black tracking-tighter text-gray-900">Detalii comandă</h1>
           <LocalizedClientLink
-            href="/account/orders"
+            href="/cont/comenzi"
             className="flex items-center gap-x-2 text-xs font-black text-gray-400 hover:text-black transition-colors uppercase tracking-widest group"
             data-testid="back-to-overview-button"
           >

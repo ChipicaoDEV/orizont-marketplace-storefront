@@ -7,7 +7,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 const ACCOUNT_LINKS = [
   {
     label: "Profilul meu",
-    href: "/account/profile",
+    href: "/cont/informatii",
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
@@ -17,7 +17,7 @@ const ACCOUNT_LINKS = [
   },
   {
     label: "Comenzile mele",
-    href: "/account/orders",
+    href: "/cont/comenzi",
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
@@ -27,7 +27,7 @@ const ACCOUNT_LINKS = [
   },
   {
     label: "Adresele mele",
-    href: "/account/addresses",
+    href: "/cont/adrese",
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
@@ -68,7 +68,7 @@ export default function NavAccountDropdown({ customer }: Props) {
     >
       {/* Trigger */}
       <LocalizedClientLink
-        href="/account"
+        href="/cont"
         aria-label="Contul meu"
         data-testid="nav-account-link"
         className={`flex items-center gap-x-1.5 transition-colors duration-150 ${
@@ -158,7 +158,7 @@ export default function NavAccountDropdown({ customer }: Props) {
           <div className="px-4 pb-4 pt-2 border-t border-gray-100">
             {customer ? (
               <LocalizedClientLink
-                href="/account"
+                href="/cont"
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-center w-full h-9 bg-[#F27A1A] hover:bg-[#D4600E] text-white text-sm font-semibold rounded-xl transition-colors duration-150"
               >
@@ -166,7 +166,7 @@ export default function NavAccountDropdown({ customer }: Props) {
               </LocalizedClientLink>
             ) : (
               <LocalizedClientLink
-                href="/account"
+                href="/cont"
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-center w-full h-9 bg-[#F27A1A] hover:bg-[#D4600E] text-white text-sm font-semibold rounded-xl transition-colors duration-150"
               >
