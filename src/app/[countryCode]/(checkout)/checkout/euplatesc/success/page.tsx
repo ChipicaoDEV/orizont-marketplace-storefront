@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation"
 import { Metadata } from "next"
 import { retrieveCart, initiatePaymentSession, placeOrder } from "@lib/data/cart"
-import { removeCartId } from "@lib/data/cookies"
 import { getEuplatescOrderId } from "@lib/data/euplatesc"
 
 export const metadata: Metadata = {
@@ -62,7 +61,6 @@ export default async function EuplatescSuccessPage({ params, searchParams }: Pro
   const existingOrderId = await getEuplatescOrderId(invoiceId!)
 
   if (existingOrderId) {
-    await removeCartId()
     redirect(`/order/${existingOrderId}/confirmed`)
   }
 
