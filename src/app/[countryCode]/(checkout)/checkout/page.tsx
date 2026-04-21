@@ -1,6 +1,7 @@
 import { retrieveCart, clearCartShippingMethods } from "@lib/data/cart"
 import { retrieveCustomer } from "@lib/data/customer"
 import CheckoutForm from "@modules/checkout/templates/checkout-form"
+import CheckoutAuthChoice from "@modules/checkout/components/checkout-auth-choice"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
@@ -10,16 +11,12 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-  searchParams: Promise<{ step?: string; method?: string }>
+  searchParams: Promise<{ step?: string; method?: string; guest?: string }>
 }
 
 export default async function Checkout({ searchParams }: Props) {
-  const { step = "delivery", method = "livrare" } = await searchParams
+  const { step = "delivery", method = "livrare", guest } = await searchParams
 
-  // When entering the delivery step (fresh start or back-navigation), clear any
-  // stale shipping method so the dynamic cost preview and total start clean.
-  // clearCartShippingMethods always returns the current cart; fall back to a
-  // normal retrieve only if it throws.
   let cart = step === "delivery"
     ? await clearCartShippingMethods().catch(() => retrieveCart().catch(() => null))
     : await retrieveCart().catch(() => null)
@@ -29,6 +26,11 @@ export default async function Checkout({ searchParams }: Props) {
   }
 
   const customer = await retrieveCustomer().catch(() => null)
+
+  // Show login/guest choice on the first step when not logged in and not already a guest
+  if (!customer && step === "delivery" && !guest) {
+    return <CheckoutAuthChoice />
+  }
 
   return <CheckoutForm cart={cart} customer={customer} step={step} method={method} />
 }

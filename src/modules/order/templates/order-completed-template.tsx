@@ -38,8 +38,10 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function OrderCompletedTemplate({
   order,
+  customer,
 }: {
   order: HttpTypes.StoreOrder
+  customer: import("@medusajs/types").HttpTypes.StoreCustomer | null
 }) {
   const items = order.items ?? []
   const addr = order.shipping_address
@@ -195,11 +197,13 @@ export default function OrderCompletedTemplate({
 
         {/* CTA buttons */}
         <div className="flex flex-col sm:flex-row gap-3 pt-8 mt-8 border-t border-gray-100">
-          <LocalizedClientLink href="/account/orders" className="flex-1">
-            <button className="w-full h-11 border-2 border-[#F27A1A] text-[#F27A1A] hover:bg-[#FFF3E6] font-semibold rounded-xl transition-colors duration-150 text-sm">
-              Vezi comenzile mele
-            </button>
-          </LocalizedClientLink>
+          {customer && (
+            <LocalizedClientLink href="/cont/comenzi" className="flex-1">
+              <button className="w-full h-11 border-2 border-[#F27A1A] text-[#F27A1A] hover:bg-[#FFF3E6] font-semibold rounded-xl transition-colors duration-150 text-sm">
+                Vezi comenzile mele
+              </button>
+            </LocalizedClientLink>
+          )}
           <LocalizedClientLink href="/store" className="flex-1">
             <button className="w-full h-11 bg-[#F27A1A] hover:bg-[#D4600E] text-white font-semibold rounded-xl transition-colors duration-150 text-sm">
               Înapoi la magazin
