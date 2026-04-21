@@ -5,12 +5,15 @@ import Thumbnail from "@modules/products/components/thumbnail"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
+import { getOrderStatusDisplay } from "@modules/account/components/cont-shared/utils"
 
 type OrderCardProps = {
   order: HttpTypes.StoreOrder
 }
 
 const OrderCard = ({ order }: OrderCardProps) => {
+  const { label: statusLabel, className: statusClass } = getOrderStatusDisplay(order)
+
   const numberOfLines = useMemo(() => {
     return (
       order.items?.reduce((acc, item) => {
@@ -34,8 +37,8 @@ const OrderCard = ({ order }: OrderCardProps) => {
         </div>
         <div className="flex flex-col items-end gap-y-1">
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 leading-none">Status</span>
-          <span className="text-[10px] font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full uppercase tracking-widest border border-green-100">
-            Confirmată
+          <span className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest ${statusClass}`}>
+            {statusLabel}
           </span>
         </div>
       </div>

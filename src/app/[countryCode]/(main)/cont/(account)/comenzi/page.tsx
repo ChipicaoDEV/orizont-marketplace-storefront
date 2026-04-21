@@ -3,7 +3,7 @@ import Link from "next/link"
 import { retrieveCustomer } from "@lib/data/customer"
 import { listOrders } from "@lib/data/orders"
 import { notFound } from "next/navigation"
-import { orderStatusConfig, formatRon, formatDate } from "@modules/account/components/cont-shared/utils"
+import { getOrderStatusDisplay, formatRon, formatDate } from "@modules/account/components/cont-shared/utils"
 
 export const metadata: Metadata = {
   title: "Comenzile mele | Orizont",
@@ -49,7 +49,7 @@ export default async function ComenziPage({ params }: Props) {
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
           <ul className="divide-y divide-gray-100">
             {orders.map((order) => {
-              const { label, className } = orderStatusConfig(order.status)
+              const { label, className } = getOrderStatusDisplay(order)
               return (
                 <li key={order.id}>
                   <Link
