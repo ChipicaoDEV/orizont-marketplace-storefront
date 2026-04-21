@@ -61,7 +61,7 @@ export default async function EuplatescSuccessPage({ params, searchParams }: Pro
   const existingOrderId = await getEuplatescOrderId(invoiceId!)
 
   if (existingOrderId) {
-    redirect(`/order/${existingOrderId}/confirmed`)
+    redirect(`/api/checkout/clear-cart?redirect=/order/${existingOrderId}/confirmed`)
   }
 
   // ── Fallback path: IPN failed or hasn't fired yet ────────────────────────
