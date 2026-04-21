@@ -539,7 +539,12 @@ export async function saveDeliveryInfo(
 
     await sdk.store.cart.update(
       cartId,
-      { email, shipping_address: baseAddress, billing_address: billingAddress },
+      {
+        email,
+        shipping_address: baseAddress,
+        billing_address: billingAddress,
+        metadata: { delivery_method: deliveryMethod },
+      },
       {},
       headers
     )
