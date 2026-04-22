@@ -97,6 +97,7 @@ export default function StepPayment({ cart, availablePaymentMethods }: StepPayme
   const deliveryMethod = searchParams.get("method") ?? "livrare"
   const isPickup = deliveryMethod === "pickup"
   const [isPending, startTransition] = useTransition()
+  const [isRedirecting, setIsRedirecting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>("card")
   const [epFormData, setEpFormData] = useState<EuplatescFormData | null>(null)
@@ -125,7 +126,7 @@ export default function StepPayment({ cart, availablePaymentMethods }: StepPayme
   const total = cart.total ?? 0
 
   const handlePlaceOrder = () => {
-    if (isPending || notReady) return
+    if (isPending || isRedirecting || notReady) return
     setError(null)
 
     if (selectedMethod === "cod") {
@@ -151,6 +152,7 @@ export default function StepPayment({ cart, availablePaymentMethods }: StepPayme
             return
           }
           // useEffect will auto-submit formRef when epFormData is set
+          setIsRedirecting(true)
           setEpFormData(result)
         } catch (e: any) {
           setError(e.message ?? "A apărut o eroare la inițierea plății cu cardul.")
@@ -255,28 +257,37 @@ export default function StepPayment({ cart, availablePaymentMethods }: StepPayme
 
       {/* ── Card logos ─────────────────────────────────────────────────────── */}
       {selectedMethod === "card" && (
-        <div className="flex items-center gap-x-2 text-xs text-gray-400">
-          {/* Visa */}
-          <span className="inline-flex items-center justify-center h-7 px-2.5 rounded border border-gray-200 bg-white font-bold text-blue-800 tracking-tight text-[11px]">
-            VISA
-          </span>
-          {/* Mastercard */}
-          <span className="inline-flex items-center justify-center h-7 px-2 rounded border border-gray-200 bg-white gap-x-0.5">
-            <span className="w-3.5 h-3.5 rounded-full bg-red-500 opacity-90" />
-            <span className="w-3.5 h-3.5 rounded-full bg-yellow-400 opacity-90 -ml-1.5" />
-          </span>
-          {/* Maestro */}
-          <span className="inline-flex items-center justify-center h-7 px-2.5 rounded border border-gray-200 bg-white font-semibold text-[11px] text-gray-600">
-            Maestro
-          </span>
+        <div className="flex items-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://secure.eupayment.eu/tdsprocess/images/logo/vm1.png"
+            alt="Visa, Mastercard, Maestro"
+            className="h-8 object-contain"
+          />
         </div>
       )}
 
       {/* ── Terms ──────────────────────────────────────────────────────────── */}
       <p className="text-xs text-gray-400 leading-relaxed">
         Prin plasarea comenzii confirmi că ai citit și ești de acord cu{" "}
-        <span className="text-[#F27A1A]">Termenii și Condițiile</span> și{" "}
-        <span className="text-[#F27A1A]">Politica de Confidențialitate</span> Orizont.
+        <a
+          href="/termeni-si-conditii"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#F27A1A] underline hover:text-[#D4600E]"
+        >
+          Termenii și Condițiile
+        </a>{" "}
+        și{" "}
+        <a
+          href="/protectia-datelor"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#F27A1A] underline hover:text-[#D4600E]"
+        >
+          Politica de Confidențialitate
+        </a>{" "}
+        Orizont.
       </p>
 
       {/* ── Warnings ───────────────────────────────────────────────────────── */}
@@ -296,11 +307,11 @@ export default function StepPayment({ cart, availablePaymentMethods }: StepPayme
       <button
         type="button"
         onClick={handlePlaceOrder}
-        disabled={isPending || notReady}
+        disabled={isPending || isRedirecting || notReady}
         data-testid="submit-order-button"
         className="w-full h-12 bg-[#F27A1A] hover:bg-[#D4600E] text-white font-semibold rounded-xl transition-colors duration-150 flex items-center justify-center gap-x-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm"
       >
-        {isPending ? (
+        {isPending || isRedirecting ? (
           <>
             <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -338,7 +349,7 @@ export default function StepPayment({ cart, availablePaymentMethods }: StepPayme
         )}
       </button>
 
-      {selectedMethod === "card" && !isPending && (
+      {selectedMethod === "card" && !isPending && !isRedirecting && (
         <p className="text-[11px] text-center text-gray-400 -mt-2">
           Vei fi redirecționat automat către pagina securizată EuPlătesc.
         </p>
