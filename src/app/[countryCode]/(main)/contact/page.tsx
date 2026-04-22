@@ -5,17 +5,32 @@ export const metadata: Metadata = {
   description: "Contactează-ne — Orizont, materiale de construcții, Sighetu Marmației.",
 }
 
+const phoneIcon = (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+  </svg>
+)
+
+const emailIcon = (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+  </svg>
+)
+
 const CONTACT_ROWS = [
   {
     label: "Telefon",
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-      </svg>
-    ),
+    icon: phoneIcon,
     content: (
-      <div className="flex flex-col gap-y-1">
+      <div className="flex flex-col gap-y-1.5">
+        <div className="flex flex-col gap-y-0.5">
+          <a href="tel:0730076606" className="text-sm font-semibold text-[#F27A1A] hover:text-[#D4600E] transition-colors">
+            0730 076606
+          </a>
+          <span className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Contact comenzi</span>
+        </div>
         <a href="tel:0262310960" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
           0262-310960
         </a>
@@ -23,6 +38,15 @@ const CONTACT_ROWS = [
           0262-310990
         </a>
       </div>
+    ),
+  },
+  {
+    label: "Departament tehnic",
+    icon: phoneIcon,
+    content: (
+      <a href="tel:0743428282" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
+        0743 428282
+      </a>
     ),
   },
   {
@@ -39,12 +63,7 @@ const CONTACT_ROWS = [
   },
   {
     label: "Administrație",
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-      </svg>
-    ),
+    icon: emailIcon,
     content: (
       <a href="mailto:vlad@orizont-srl.ro" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
         vlad@orizont-srl.ro
@@ -53,12 +72,7 @@ const CONTACT_ROWS = [
   },
   {
     label: "Director Financiar",
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-      </svg>
-    ),
+    icon: emailIcon,
     content: (
       <a href="mailto:monica@orizont-srl.ro" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
         monica@orizont-srl.ro
@@ -67,12 +81,7 @@ const CONTACT_ROWS = [
   },
   {
     label: "Director comercial",
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-      </svg>
-    ),
+    icon: emailIcon,
     content: (
       <a href="mailto:office@orizont-srl.ro" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
         office@orizont-srl.ro
@@ -81,12 +90,7 @@ const CONTACT_ROWS = [
   },
   {
     label: "Asistență tehnică",
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-      </svg>
-    ),
+    icon: emailIcon,
     content: (
       <a href="mailto:oliver@orizont-srl.ro" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
         oliver@orizont-srl.ro
