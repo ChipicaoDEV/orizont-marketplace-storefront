@@ -116,7 +116,7 @@ function buildOfertaEmailHtml(payload: Omit<QuoteRequestPayload, "turnstileToken
           <!-- Footer -->
           <tr>
             <td align="center" style="padding-top:16px;">
-              <p style="margin:0;font-size:12px;color:#AAAAAA;">Orizont · cerere trimisă prin test.orizont-srl.ro</p>
+              <p style="margin:0;font-size:12px;color:#AAAAAA;">Orizont · cerere trimisă prin orizont-srl.ro</p>
             </td>
           </tr>
 
