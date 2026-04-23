@@ -10,7 +10,7 @@ const INFO_LINKS = [
 
 const LEGAL_LINKS = [
   { label: "Termeni și condiții", href: "/termeni-si-conditii" },
-  { label: "Protecția datelor", href: "/protectia-datelor" },
+  { label: "Politica de confidențialitate", href: "/politica-de-confidentialitate" },
   { label: "Politica de retur", href: "/politica-de-retur" },
 ]
 

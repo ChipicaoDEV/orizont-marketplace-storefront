@@ -280,7 +280,7 @@ export default function StepPayment({ cart, availablePaymentMethods }: StepPayme
         </a>{" "}
         și{" "}
         <a
-          href="/protectia-datelor"
+          href="/politica-de-confidentialitate"
           target="_blank"
           rel="noopener noreferrer"
           className="text-[#F27A1A] underline hover:text-[#D4600E]"

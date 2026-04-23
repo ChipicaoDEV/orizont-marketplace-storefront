@@ -92,7 +92,7 @@ const Register = ({ setCurrentView }: Props) => {
         <span className="text-center text-gray-400 text-[11px] mt-6 leading-relaxed">
           Prin crearea unui cont, ești de acord cu{" "}
           <LocalizedClientLink
-            href="/privacy-policy"
+            href="/politica-de-confidentialitate"
             className="underline hover:text-gray-600"
           >
             Politica de Confidențialitate
