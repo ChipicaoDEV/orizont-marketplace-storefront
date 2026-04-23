@@ -15,6 +15,18 @@ import {
   setAuthToken,
 } from "./cookies"
 
+async function verifyTurnstile(token: string): Promise<boolean> {
+  const secret = process.env.TURNSTILE_SECRET_KEY
+  if (!secret) return true // skip in dev if key not configured
+  const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ secret, response: token }),
+  })
+  const data = await res.json()
+  return data.success === true
+}
+
 export const retrieveCustomer =
   async (): Promise<HttpTypes.StoreCustomer | null> => {
     const authHeaders = await getAuthHeaders()
@@ -60,6 +72,11 @@ export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
 }
 
 export async function signup(_currentState: unknown, formData: FormData) {
+  const turnstileToken = formData.get("turnstile_token") as string
+  if (!(await verifyTurnstile(turnstileToken))) {
+    return "Verificarea de securitate a eșuat. Te rugăm să încerci din nou."
+  }
+
   const password = formData.get("password") as string
   const customerForm = {
     email: formData.get("email") as string,
@@ -105,6 +122,11 @@ export async function signup(_currentState: unknown, formData: FormData) {
 }
 
 export async function login(_currentState: unknown, formData: FormData) {
+  const turnstileToken = formData.get("turnstile_token") as string
+  if (!(await verifyTurnstile(turnstileToken))) {
+    return "Verificarea de securitate a eșuat. Te rugăm să încerci din nou."
+  }
+
   const email = formData.get("email") as string
   const password = formData.get("password") as string
 

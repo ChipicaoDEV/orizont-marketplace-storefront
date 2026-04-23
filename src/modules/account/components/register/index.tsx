@@ -1,12 +1,13 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useState, useRef, useEffect } from "react"
 import Input from "@modules/common/components/input"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { signup } from "@lib/data/customer"
+import { Turnstile } from "@marsidev/react-turnstile"
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
@@ -14,6 +15,15 @@ type Props = {
 
 const Register = ({ setCurrentView }: Props) => {
   const [message, formAction] = useActionState(signup, null)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileRef = useRef<any>(null)
+
+  useEffect(() => {
+    if (message) {
+      setTurnstileToken(null)
+      turnstileRef.current?.reset()
+    }
+  }, [message])
 
   return (
     <div
@@ -68,6 +78,16 @@ const Register = ({ setCurrentView }: Props) => {
             data-testid="password-input"
           />
         </div>
+        <input type="hidden" name="turnstile_token" value={turnstileToken ?? ""} />
+        <div className="flex justify-center mt-5">
+          <Turnstile
+            ref={turnstileRef}
+            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+            onSuccess={(token) => setTurnstileToken(token)}
+            onExpire={() => setTurnstileToken(null)}
+            onError={() => setTurnstileToken(null)}
+          />
+        </div>
         <ErrorMessage error={message} data-testid="register-error" />
         <span className="text-center text-gray-400 text-[11px] mt-6 leading-relaxed">
           Prin crearea unui cont, ești de acord cu{" "}
@@ -86,7 +106,11 @@ const Register = ({ setCurrentView }: Props) => {
           </LocalizedClientLink>{" "}
           Orizont.
         </span>
-        <SubmitButton className="w-full mt-6 bg-[#F27A1A] hover:bg-[#D4600E] text-white transition-all duration-200 h-12 rounded-2xl font-bold uppercase tracking-widest text-xs shadow-sm shadow-orange-100" data-testid="register-button">
+        <SubmitButton
+          disabled={!turnstileToken}
+          className="w-full mt-6 bg-[#F27A1A] hover:bg-[#D4600E] text-white transition-all duration-200 h-12 rounded-2xl font-bold uppercase tracking-widest text-xs shadow-sm shadow-orange-100 disabled:opacity-60 disabled:cursor-not-allowed"
+          data-testid="register-button"
+        >
           Înregistrare
         </SubmitButton>
       </form>

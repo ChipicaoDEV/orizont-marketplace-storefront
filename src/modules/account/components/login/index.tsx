@@ -1,9 +1,12 @@
+"use client"
+
+import { useActionState, useState, useRef, useEffect } from "react"
 import { login } from "@lib/data/customer"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import Input from "@modules/common/components/input"
-import { useActionState } from "react"
+import { Turnstile } from "@marsidev/react-turnstile"
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
@@ -11,6 +14,15 @@ type Props = {
 
 const Login = ({ setCurrentView }: Props) => {
   const [message, formAction] = useActionState(login, null)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileRef = useRef<any>(null)
+
+  useEffect(() => {
+    if (message) {
+      setTurnstileToken(null)
+      turnstileRef.current?.reset()
+    }
+  }, [message])
 
   return (
     <div
@@ -43,8 +55,22 @@ const Login = ({ setCurrentView }: Props) => {
             data-testid="password-input"
           />
         </div>
+        <input type="hidden" name="turnstile_token" value={turnstileToken ?? ""} />
+        <div className="flex justify-center mt-5">
+          <Turnstile
+            ref={turnstileRef}
+            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+            onSuccess={(token) => setTurnstileToken(token)}
+            onExpire={() => setTurnstileToken(null)}
+            onError={() => setTurnstileToken(null)}
+          />
+        </div>
         <ErrorMessage error={message} data-testid="login-error-message" />
-        <SubmitButton data-testid="sign-in-button" className="w-full mt-8 bg-[#F27A1A] hover:bg-[#D4600E] text-white transition-all duration-200 h-12 rounded-2xl font-bold uppercase tracking-widest text-xs shadow-sm shadow-orange-100">
+        <SubmitButton
+          disabled={!turnstileToken}
+          data-testid="sign-in-button"
+          className="w-full mt-6 bg-[#F27A1A] hover:bg-[#D4600E] text-white transition-all duration-200 h-12 rounded-2xl font-bold uppercase tracking-widest text-xs shadow-sm shadow-orange-100 disabled:opacity-60 disabled:cursor-not-allowed"
+        >
           Conectare
         </SubmitButton>
       </form>
