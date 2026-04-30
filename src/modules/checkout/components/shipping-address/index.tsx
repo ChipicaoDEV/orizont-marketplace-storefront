@@ -1,11 +1,15 @@
+"use client"
+
 import { HttpTypes } from "@medusajs/types"
 import { Container } from "@medusajs/ui"
 import Checkbox from "@modules/common/components/checkbox"
 import Input from "@modules/common/components/input"
+import NativeSelect from "@modules/common/components/native-select"
 import { mapKeys } from "lodash"
 import React, { useEffect, useMemo, useState } from "react"
 import AddressSelect from "../address-select"
 import CountrySelect from "../country-select"
+import { JUDETE_RO, LOCALITATI_RO } from "@lib/data/ro-localities"
 
 const ShippingAddress = ({
   customer,
@@ -31,12 +35,14 @@ const ShippingAddress = ({
     email: cart?.email || "",
   })
 
+  const selectedJudet = formData["shipping_address.province"] || ""
+  const localitatiList = selectedJudet ? (LOCALITATI_RO[selectedJudet] ?? []) : []
+
   const countriesInRegion = useMemo(
     () => cart?.region?.countries?.map((c) => c.iso_2),
     [cart?.region]
   )
 
-  // check if customer has saved addresses that are in the current region
   const addressesInRegion = useMemo(
     () =>
       customer?.addresses.filter(
@@ -71,7 +77,6 @@ const ShippingAddress = ({
   }
 
   useEffect(() => {
-    // Ensure cart is not null and has a shipping_address before setting form data
     if (cart && cart.shipping_address) {
       setFormAddress(cart?.shipping_address, cart?.email)
     }
@@ -79,17 +84,25 @@ const ShippingAddress = ({
     if (cart && !cart.email && customer?.email) {
       setFormAddress(undefined, customer.email)
     }
-  }, [cart]) // Add cart as a dependency
+  }, [cart])
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLInputElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
+    const { name, value } = e.target
+    if (name === "shipping_address.province") {
+      // reset city when county changes
+      setFormData((prev: Record<string, any>) => ({
+        ...prev,
+        [name]: value,
+        "shipping_address.city": "",
+      }))
+    } else {
+      setFormData((prev: Record<string, any>) => ({
+        ...prev,
+        [name]: value,
+      }))
+    }
   }
 
   return (
@@ -146,24 +159,6 @@ const ShippingAddress = ({
           autoComplete="organization"
           data-testid="shipping-company-input"
         />
-        <Input
-          label="Cod poștal"
-          name="shipping_address.postal_code"
-          autoComplete="postal-code"
-          value={formData["shipping_address.postal_code"]}
-          onChange={handleChange}
-          required
-          data-testid="shipping-postal-code-input"
-        />
-        <Input
-          label="Oraș"
-          name="shipping_address.city"
-          autoComplete="address-level2"
-          value={formData["shipping_address.city"]}
-          onChange={handleChange}
-          required
-          data-testid="shipping-city-input"
-        />
         <CountrySelect
           name="shipping_address.country_code"
           autoComplete="country"
@@ -173,13 +168,43 @@ const ShippingAddress = ({
           required
           data-testid="shipping-country-select"
         />
-        <Input
-          label="Județ / Provincie"
+        <NativeSelect
           name="shipping_address.province"
-          autoComplete="address-level1"
           value={formData["shipping_address.province"]}
           onChange={handleChange}
-          data-testid="shipping-province-input"
+          required
+          placeholder="Județ"
+          data-testid="shipping-province-select"
+        >
+          {JUDETE_RO.map(({ name }) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </NativeSelect>
+        <NativeSelect
+          name="shipping_address.city"
+          value={formData["shipping_address.city"]}
+          onChange={handleChange}
+          required
+          placeholder={selectedJudet ? "Localitate" : "Selectează mai întâi județul"}
+          disabled={!selectedJudet}
+          data-testid="shipping-city-select"
+        >
+          {localitatiList.map((loc) => (
+            <option key={loc} value={loc}>
+              {loc}
+            </option>
+          ))}
+        </NativeSelect>
+        <Input
+          label="Cod poștal"
+          name="shipping_address.postal_code"
+          autoComplete="postal-code"
+          value={formData["shipping_address.postal_code"]}
+          onChange={handleChange}
+          required
+          data-testid="shipping-postal-code-input"
         />
       </div>
       <div className="my-8">
