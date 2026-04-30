@@ -26,7 +26,7 @@ const TopBar = () => {
 
           {/* Email */}
           <a
-            href="mailto:office@orizont-srl.ro"
+            href="mailto:comenzi@orizont-srl.ro"
             className="flex items-center gap-x-1.5 hover:text-gray-300 transition-colors"
           >
             <svg
@@ -42,7 +42,7 @@ const TopBar = () => {
                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
               />
             </svg>
-            <span>office@orizont-srl.ro</span>
+            <span>comenzi@orizont-srl.ro</span>
           </a>
         </div>
 

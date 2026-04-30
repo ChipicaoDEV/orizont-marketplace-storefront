@@ -31,9 +31,9 @@ const PHONE_DEPTS = [
 ]
 
 const EMAIL_ROWS = [
+  { label: "Comenzi", email: "comenzi@orizont-srl.ro" },
   { label: "Administrație", email: "vlad@orizont-srl.ro" },
   { label: "Director Financiar", email: "monica@orizont-srl.ro" },
-  { label: "Director comercial", email: "comenzi@orizont-srl.ro" },
   { label: "Asistență tehnică", email: "oliver@orizont-srl.ro" },
 ]
 

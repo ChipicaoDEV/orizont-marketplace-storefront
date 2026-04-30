@@ -11,7 +11,7 @@ const SECTIONS = [
     content: `Operatorul datelor cu caracter personal este SC ORIZONT SIGHETU MARMATIEI SRL, cu sediul în Str. Plevenei nr. 3, Sighetu Marmației, înregistrată la Registrul Comerțului Maramureș sub nr. J1991000461241, CIF RO 2204805 (denumită în continuare „Orizont").
 
 Ne puteți contacta la:
-• E-mail: office@orizont-srl.ro
+• E-mail: comenzi@orizont-srl.ro
 • Telefon: 0730 076606`,
   },
   {
@@ -64,7 +64,7 @@ Toți partenerii noștri prelucrează datele în conformitate cu GDPR.`,
 • Dreptul de opoziție — față de prelucrările bazate pe interes legitim sau marketing direct.
 • Dreptul de a retrage consimțământul — fără a afecta legalitatea prelucrărilor anterioare.
 
-Pentru exercitarea acestor drepturi, scrieți-ne la office@orizont-srl.ro. Vom răspunde în termen de 30 de zile.`,
+Pentru exercitarea acestor drepturi, scrieți-ne la comenzi@orizont-srl.ro. Vom răspunde în termen de 30 de zile.`,
   },
   {
     title: "8. Cookie-uri",
@@ -114,8 +114,8 @@ export default function ProtectiaDatelorPage() {
 
         <div className="mt-10 p-4 bg-[#FFF3E6] rounded-xl border border-orange-100 text-sm text-gray-600">
           Întrebări? Contactați-ne la{" "}
-          <a href="mailto:office@orizont-srl.ro" className="text-[#F27A1A] font-medium hover:underline">
-            office@orizont-srl.ro
+          <a href="mailto:comenzi@orizont-srl.ro" className="text-[#F27A1A] font-medium hover:underline">
+            comenzi@orizont-srl.ro
           </a>{" "}
           sau{" "}
           <a href="tel:0730076606" className="text-[#F27A1A] font-medium hover:underline">

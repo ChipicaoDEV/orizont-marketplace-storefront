@@ -50,13 +50,13 @@ Dreptul de retragere nu se aplică în cazul:
 • produselor care se pot deteriora rapid sau al căror termen de garanție a expirat;
 • produselor care au fost utilizate sau deteriorate de Client.
 
-Pentru exercitarea dreptului de retragere, Clientul trebuie să ne contacteze la office@orizont-srl.ro sau telefonic, anterior returnării produselor.`,
+Pentru exercitarea dreptului de retragere, Clientul trebuie să ne contacteze la comenzi@orizont-srl.ro sau telefonic, anterior returnării produselor.`,
   },
   {
     title: "7. Garanție și reclamații",
     content: `Produsele comercializate beneficiază de garanția oferită de producător. Orizont acordă garanție legală de conformitate de 2 ani de la data livrării, conform legislației aplicabile.
 
-Reclamațiile privind produsele defecte sau neconforme vor fi transmise la office@orizont-srl.ro în termen de maximum 2 zile lucrătoare de la constatarea defectului, însoțite de fotografia produsului și copia documentului de achiziție.`,
+Reclamațiile privind produsele defecte sau neconforme vor fi transmise la comenzi@orizont-srl.ro în termen de maximum 2 zile lucrătoare de la constatarea defectului, însoțite de fotografia produsului și copia documentului de achiziție.`,
   },
   {
     title: "8. Răspundere",
@@ -108,8 +108,8 @@ export default function TermeniPage() {
 
         <div className="mt-10 p-4 bg-[#FFF3E6] rounded-xl border border-orange-100 text-sm text-gray-600">
           Dacă ai întrebări legate de prezentele Termeni și Condiții, ne poți contacta la{" "}
-          <a href="mailto:office@orizont-srl.ro" className="text-[#F27A1A] font-medium hover:underline">
-            office@orizont-srl.ro
+          <a href="mailto:comenzi@orizont-srl.ro" className="text-[#F27A1A] font-medium hover:underline">
+            comenzi@orizont-srl.ro
           </a>{" "}
           sau la numerele{" "}
           <a href="tel:0262310960" className="text-[#F27A1A] font-medium hover:underline">

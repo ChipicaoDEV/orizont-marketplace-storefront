@@ -15,7 +15,7 @@ Termenul de 14 zile începe din ziua în care dvs. sau o terță parte desemnat�
   {
     title: "2. Cum exercitați dreptul de retragere",
     content: `Înainte de a returna produsul, contactați-ne pentru a iniția procesul:
-• E-mail: office@orizont-srl.ro (indicați numărul comenzii și motivul)
+• E-mail: comenzi@orizont-srl.ro (indicați numărul comenzii și motivul)
 • Telefon: 0730 076606 (Contact comenzi)
 
 Puteți folosi formularul standard de retragere de mai jos sau orice altă declarație neechivocă. Ne veți notifica înainte de expirarea termenului de 14 zile.
@@ -53,7 +53,7 @@ Costul returului este suportat de client, cu excepția cazului în care produsul
   {
     title: "6. Produse defecte sau livrate eronat",
     content: `Dacă ați primit un produs defect, deteriorat în transport sau diferit față de cel comandat:
-• Contactați-ne în termen de 48 de ore de la livrare la office@orizont-srl.ro sau 0730 076606.
+• Contactați-ne în termen de 48 de ore de la livrare la comenzi@orizont-srl.ro sau 0730 076606.
 • Atașați fotografii ale produsului și ambalajului.
 
 În acest caz, Orizont suportă costurile de retur și vă oferă, la alegere: înlocuirea produsului sau rambursarea integrală a sumei plătite.`,
@@ -64,7 +64,7 @@ Costul returului este suportat de client, cu excepția cazului în care produsul
   },
   {
     title: "8. Formular de retragere (model)",
-    content: `Puteți folosi textul de mai jos trimis pe e-mail la office@orizont-srl.ro:
+    content: `Puteți folosi textul de mai jos trimis pe e-mail la comenzi@orizont-srl.ro:
 
 ---
 Către: SC ORIZONT SIGHETU MARMATIEI SRL
@@ -104,8 +104,8 @@ export default function PoliticaDeReturPage() {
 
         <div className="mt-10 p-4 bg-[#FFF3E6] rounded-xl border border-orange-100 text-sm text-gray-600">
           Pentru orice returnare sau reclamație, contactați-ne la{" "}
-          <a href="mailto:office@orizont-srl.ro" className="text-[#F27A1A] font-medium hover:underline">
-            office@orizont-srl.ro
+          <a href="mailto:comenzi@orizont-srl.ro" className="text-[#F27A1A] font-medium hover:underline">
+            comenzi@orizont-srl.ro
           </a>{" "}
           sau{" "}
           <a href="tel:0730076606" className="text-[#F27A1A] font-medium hover:underline">

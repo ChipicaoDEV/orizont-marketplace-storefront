@@ -11,7 +11,7 @@ const SECTIONS = [
     content: `SC Orizont Sighetu Marmației SRL, cu sediul în Str. Plevenei nr. 3, Sighetu Marmației, județul Maramureș, CIF RO 2204805, înregistrată la Registrul Comerțului sub nr. J24/461/1991, în calitate de operator de date cu caracter personal, prelucrează datele tale în conformitate cu Regulamentul (UE) 2016/679 privind protecția persoanelor fizice în ceea ce privește prelucrarea datelor cu caracter personal (GDPR) și cu legislația națională aplicabilă.
 
 Ne poți contacta la:
-• E-mail: office@orizont-srl.ro
+• E-mail: comenzi@orizont-srl.ro
 • Telefon: 0730 076 606
 • Adresă: Str. Plevenei nr. 3, Sighetu Marmației, județul Maramureș`,
   },
@@ -81,7 +81,7 @@ La expirarea perioadei de retenție, datele sunt șterse sau anonimizate.`,
 • Dreptul de a retrage consimțământul — în orice moment, fără a afecta legalitatea prelucrării anterioare.
 • Dreptul de a depune o plângere — la Autoritatea Națională de Supraveghere a Prelucrării Datelor cu Caracter Personal (ANSPDCP), cu sediul în B-dul G-ral. Gheorghe Magheru 28–30, Sector 1, București, www.dataprotection.ro.
 
-Pentru exercitarea oricăruia dintre aceste drepturi, ne poți contacta la office@orizont-srl.ro. Vom răspunde în termen de maximum 30 de zile.`,
+Pentru exercitarea oricăruia dintre aceste drepturi, ne poți contacta la comenzi@orizont-srl.ro. Vom răspunde în termen de maximum 30 de zile.`,
   },
   {
     title: "7. Cookie-uri",
@@ -133,8 +133,8 @@ export default function PoliticaDeConfidentialitate() {
 
         <div className="mt-10 p-4 bg-[#FFF3E6] rounded-xl border border-orange-100 text-sm text-gray-600">
           Pentru orice întrebare sau solicitare legată de datele tale personale, ne poți contacta la{" "}
-          <a href="mailto:office@orizont-srl.ro" className="text-[#F27A1A] font-medium hover:underline">
-            office@orizont-srl.ro
+          <a href="mailto:comenzi@orizont-srl.ro" className="text-[#F27A1A] font-medium hover:underline">
+            comenzi@orizont-srl.ro
           </a>{" "}
           sau la{" "}
           <a href="tel:0730076606" className="text-[#F27A1A] font-medium hover:underline">
