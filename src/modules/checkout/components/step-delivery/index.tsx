@@ -4,18 +4,7 @@ import { useActionState, useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { HttpTypes } from "@medusajs/types"
 import { saveDeliveryInfo } from "@lib/data/cart"
-
-// ── Romanian counties ─────────────────────────────────────────────────────────
-
-const JUDETE = [
-  "Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud",
-  "Botoșani", "Brașov", "Brăila", "București", "Buzău", "Caraș-Severin",
-  "Călărași", "Cluj", "Constanța", "Covasna", "Dâmbovița", "Dolj",
-  "Galați", "Giurgiu", "Gorj", "Harghita", "Hunedoara", "Ialomița",
-  "Iași", "Ilfov", "Maramureș", "Mehedinți", "Mureș", "Neamț",
-  "Olt", "Prahova", "Satu Mare", "Sălaj", "Sibiu", "Suceava",
-  "Teleorman", "Timiș", "Tulcea", "Vaslui", "Vâlcea", "Vrancea",
-]
+import { JUDETE_RO, LOCALITATI_RO } from "@lib/data/ro-localities"
 
 // ── Shared sub-components ─────────────────────────────────────────────────────
 
@@ -59,7 +48,15 @@ function Field({
   )
 }
 
-function CountySelect({ name, defaultValue }: { name: string; defaultValue?: string }) {
+function CountySelect({
+  name,
+  value,
+  onChange,
+}: {
+  name: string
+  value: string
+  onChange: (v: string) => void
+}) {
   return (
     <div className="flex flex-col gap-y-1.5">
       <label htmlFor={name} className="text-sm font-medium text-[#333333]">
@@ -69,12 +66,49 @@ function CountySelect({ name, defaultValue }: { name: string; defaultValue?: str
         id={name}
         name={name}
         required
-        defaultValue={defaultValue ?? ""}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         className="h-10 px-3 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#F27A1A] focus:border-transparent"
       >
         <option value="">Selectează județul</option>
-        {JUDETE.map((j) => (
-          <option key={j} value={j}>{j}</option>
+        {JUDETE_RO.map(({ name: n }) => (
+          <option key={n} value={n}>{n}</option>
+        ))}
+      </select>
+    </div>
+  )
+}
+
+function LocalitateSelect({
+  name,
+  judet,
+  defaultValue,
+}: {
+  name: string
+  judet: string
+  defaultValue?: string
+}) {
+  const localities = judet ? (LOCALITATI_RO[judet] ?? []) : []
+  const disabled = !judet
+
+  return (
+    <div className="flex flex-col gap-y-1.5">
+      <label htmlFor={name} className="text-sm font-medium text-[#333333]">
+        Localitate<span className="text-red-500 ml-0.5">*</span>
+      </label>
+      <select
+        id={name}
+        name={name}
+        required
+        disabled={disabled}
+        defaultValue={defaultValue ?? ""}
+        className="h-10 px-3 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#F27A1A] focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed"
+      >
+        <option value="">
+          {disabled ? "Selectează mai întâi județul" : "Selectează localitatea"}
+        </option>
+        {localities.map((loc) => (
+          <option key={loc} value={loc}>{loc}</option>
         ))}
       </select>
     </div>
@@ -101,6 +135,7 @@ function AddressFields({
   billing,
   onBillingChange,
   showCompanyToggle = true,
+  fieldPrefix = "",
 }: {
   addr: HttpTypes.StoreAddress | null | undefined
   pre: HttpTypes.StoreCustomerAddress | null | undefined
@@ -110,63 +145,80 @@ function AddressFields({
   billing: boolean
   onBillingChange: (v: boolean) => void
   showCompanyToggle?: boolean
+  fieldPrefix?: string
 }) {
+  const existingProvince = addr?.province ?? pre?.province ?? ""
+  const existingCity = addr?.city ?? pre?.city ?? ""
+
+  const [selectedCounty, setSelectedCounty] = useState(existingProvince)
+
+  const cityName = fieldPrefix ? `${fieldPrefix}city` : "city"
+  const provinceName = fieldPrefix ? `${fieldPrefix}province` : "province"
+
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="sm:col-span-2">
+        {!fieldPrefix && (
+          <div className="sm:col-span-2">
+            <Field
+              label="Nume complet"
+              name="full_name"
+              required
+              placeholder="Prenume Nume"
+              defaultValue={defFullName}
+            />
+          </div>
+        )}
+
+        {!fieldPrefix && (
           <Field
-            label="Nume complet"
-            name="full_name"
+            label="Telefon"
+            name="phone"
+            type="tel"
             required
-            placeholder="Prenume Nume"
-            defaultValue={defFullName}
+            placeholder="07XX XXX XXX"
+            defaultValue={addr?.phone ?? pre?.phone ?? ""}
+            pattern="^(\+?40|0)[0-9]{9}$"
+            title="Număr de telefon românesc valid (ex: 0740123456)"
           />
-        </div>
+        )}
 
-        <Field
-          label="Telefon"
-          name="phone"
-          type="tel"
-          required
-          placeholder="07XX XXX XXX"
-          defaultValue={addr?.phone ?? pre?.phone ?? ""}
-          pattern="^(\+?40|0)[0-9]{9}$"
-          title="Număr de telefon românesc valid (ex: 0740123456)"
-        />
+        {!fieldPrefix && (
+          <Field
+            label="Email"
+            name="email"
+            type="email"
+            required
+            placeholder="adresa@exemplu.ro"
+            defaultValue={cart?.email ?? customer?.email ?? ""}
+          />
+        )}
 
-        <Field
-          label="Email"
-          name="email"
-          type="email"
-          required
-          placeholder="adresa@exemplu.ro"
-          defaultValue={cart?.email ?? customer?.email ?? ""}
-        />
-
-        <div className="sm:col-span-2">
+        <div className={fieldPrefix ? "" : "sm:col-span-2"}>
           <Field
             label="Adresă"
-            name="address_1"
+            name={fieldPrefix ? `${fieldPrefix}address_1` : "address_1"}
             required
             placeholder="Strada, numărul, blocul, apartamentul"
             defaultValue={addr?.address_1 ?? pre?.address_1 ?? ""}
           />
         </div>
 
-        <Field
-          label="Oraș"
-          name="city"
-          required
-          placeholder="București"
-          defaultValue={addr?.city ?? pre?.city ?? ""}
+        <CountySelect
+          name={provinceName}
+          value={selectedCounty}
+          onChange={(v) => setSelectedCounty(v)}
         />
 
-        <CountySelect name="province" defaultValue={addr?.province ?? pre?.province ?? ""} />
+        <LocalitateSelect
+          name={cityName}
+          judet={selectedCounty}
+          defaultValue={existingCity}
+        />
 
         <Field
           label="Cod poștal"
-          name="postal_code"
+          name={fieldPrefix ? `${fieldPrefix}postal_code` : "postal_code"}
           placeholder="123456"
           defaultValue={addr?.postal_code ?? pre?.postal_code ?? ""}
         />
@@ -224,16 +276,13 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
 
   const [step1State, formAction1, isPending1] = useActionState(saveDeliveryInfo, null)
 
-  // "Facturare pe firmă" toggle — used only for pickup (billing details)
   const [billing, setBilling] = useState(false)
-
-  // Separate billing address toggle — used only for livrare
   const [useDifferentBilling, setUseDifferentBilling] = useState(false)
   const [billingCompany, setBillingCompany] = useState(false)
 
-  // Saved address selector
   const savedAddresses = customer?.addresses ?? []
   const [selectedAddrId, setSelectedAddrId] = useState<string>("")
+  const [billingCounty, setBillingCounty] = useState("")
 
   const addr = cart?.shipping_address
   const pre = savedAddresses.find((a) => a.id === selectedAddrId) ?? savedAddresses[0] ?? null
@@ -250,14 +299,12 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
     typeof step1State === "object" &&
     "ok" in (step1State as object)
 
-  // After address + shipping method saved, redirect to payment
   useEffect(() => {
     if (addressSaved) {
       router.push(`/checkout?step=payment&method=${method}`)
     }
   }, [addressSaved, router, countryCode, method])
 
-  // Show spinner while redirecting
   if (addressSaved) {
     return (
       <div className="flex flex-col items-center gap-y-4 py-10 text-gray-400">
@@ -267,7 +314,6 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
     )
   }
 
-  // ── Address form ──────────────────────────────────────────────────────────────
   const formTitle = isPickup ? "Date de facturare" : "Informații de livrare"
 
   return (
@@ -293,7 +339,7 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
         Înapoi
       </button>
 
-      {/* Badge showing selected method */}
+      {/* Method badge */}
       <div className="flex items-center gap-x-3">
         <div
           className={`inline-flex items-center gap-x-1.5 px-3 py-1 rounded-full text-xs font-semibold ${
@@ -342,7 +388,6 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
 
       <h2 className="text-lg font-bold text-[#1A1A1A]">{formTitle}</h2>
 
-      {/* ── Pickup: standard address fields with company toggle ─────────────── */}
       {isPickup && (
         <AddressFields
           key={selectedAddrId || "new"}
@@ -356,7 +401,6 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
         />
       )}
 
-      {/* ── Livrare: shipping fields + optional separate billing section ────── */}
       {!isPickup && (
         <>
           <AddressFields
@@ -420,14 +464,16 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
                     />
                   </div>
 
-                  <Field
-                    label="Oraș"
-                    name="billing_city"
-                    required
-                    placeholder="București"
+                  <CountySelect
+                    name="billing_province"
+                    value={billingCounty}
+                    onChange={setBillingCounty}
                   />
 
-                  <CountySelect name="billing_province" />
+                  <LocalitateSelect
+                    name="billing_city"
+                    judet={billingCounty}
+                  />
 
                   <Field
                     label="Cod poștal"
@@ -436,7 +482,6 @@ export default function StepDelivery({ cart, customer, method }: StepDeliveryPro
                   />
                 </div>
 
-                {/* Company billing */}
                 <div>
                   <label className="flex items-center gap-x-2.5 cursor-pointer select-none">
                     <input
