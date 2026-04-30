@@ -19,101 +19,27 @@ const emailIcon = (
   </svg>
 )
 
-const CONTACT_ROWS = [
-  {
-    label: "Telefon",
-    icon: phoneIcon,
-    content: (
-      <div className="flex flex-col gap-y-1.5">
-        <div className="flex flex-col gap-y-0.5">
-          <a href="tel:0730076606" className="text-sm font-semibold text-[#F27A1A] hover:text-[#D4600E] transition-colors">
-            0730 076606
-          </a>
-          <span className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Contact comenzi</span>
-        </div>
-        <a href="tel:0262310960" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
-          0262-310960
-        </a>
-        <a href="tel:0262310990" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
-          0262-310990
-        </a>
-      </div>
-    ),
-  },
-  {
-    label: "Departament tehnic",
-    icon: phoneIcon,
-    content: (
-      <a href="tel:0743428282" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
-        0743 428282
-      </a>
-    ),
-  },
-  {
-    label: "Fax",
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-          d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-      </svg>
-    ),
-    content: (
-      <span className="text-sm font-medium text-[#1A1A1A]">0262-310980</span>
-    ),
-  },
-  {
-    label: "Administrație",
-    icon: emailIcon,
-    content: (
-      <a href="mailto:vlad@orizont-srl.ro" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
-        vlad@orizont-srl.ro
-      </a>
-    ),
-  },
-  {
-    label: "Director Financiar",
-    icon: emailIcon,
-    content: (
-      <a href="mailto:monica@orizont-srl.ro" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
-        monica@orizont-srl.ro
-      </a>
-    ),
-  },
-  {
-    label: "Director comercial",
-    icon: emailIcon,
-    content: (
-      <a href="mailto:office@orizont-srl.ro" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
-        office@orizont-srl.ro
-      </a>
-    ),
-  },
-  {
-    label: "Asistență tehnică",
-    icon: emailIcon,
-    content: (
-      <a href="mailto:oliver@orizont-srl.ro" className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
-        oliver@orizont-srl.ro
-      </a>
-    ),
-  },
-  {
-    label: "Adresă",
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-    ),
-    content: (
-      <span className="text-sm font-medium text-[#1A1A1A]">
-        Str. Plevenei nr. 3, Sighetu Marmației
-      </span>
-    ),
-  },
+const PHONE_DEPTS = [
+  { label: "Comenzi", numbers: ["0730 076 606"] },
+  { label: "Obiecte sanitare, gresie și faianță", numbers: ["0730 076 593"] },
+  { label: "Materiale de construcții", numbers: ["0729 148 110", "0755 612 281"] },
+  { label: "Finisaje", numbers: ["0730 076 597", "0730 076 593"] },
+  { label: "Instalații sanitare", numbers: ["0730 076 595"] },
+  { label: "Instalații electrice", numbers: ["0730 076 595"] },
+  { label: "Scule și echipamente", numbers: ["0730 076 595"] },
+  { label: "Amenajări exterioare", numbers: ["0729 148 110"] },
 ]
+
+const EMAIL_ROWS = [
+  { label: "Administrație", email: "vlad@orizont-srl.ro" },
+  { label: "Director Financiar", email: "monica@orizont-srl.ro" },
+  { label: "Director comercial", email: "comenzi@orizont-srl.ro" },
+  { label: "Asistență tehnică", email: "oliver@orizont-srl.ro" },
+]
+
+function toTelHref(num: string) {
+  return "tel:" + num.replace(/\s/g, "")
+}
 
 export default function ContactPage() {
   return (
@@ -126,25 +52,70 @@ export default function ContactPage() {
 
           {/* Left — contact details */}
           <div className="flex flex-col gap-y-4">
+
+            {/* Phone departments */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              {CONTACT_ROWS.map(({ label, icon, content }, i) => (
+              <div className="flex items-center gap-x-3 px-5 py-3.5 border-b border-gray-100">
+                <div className="w-8 h-8 rounded-lg bg-[#FFF3E6] flex items-center justify-center text-[#F27A1A]">
+                  {phoneIcon}
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Telefon</span>
+              </div>
+              {PHONE_DEPTS.map(({ label, numbers }, i) => (
                 <div
                   key={label}
-                  className={`flex items-start gap-x-4 px-5 py-4 ${
-                    i < CONTACT_ROWS.length - 1 ? "border-b border-gray-50" : ""
-                  }`}
+                  className={`flex items-start justify-between gap-x-4 px-5 py-3 ${i < PHONE_DEPTS.length - 1 ? "border-b border-gray-50" : ""}`}
+                >
+                  <span className="text-sm text-gray-500 flex-1">{label}</span>
+                  <div className="flex flex-col items-end gap-y-0.5">
+                    {numbers.map(n => (
+                      <a key={n} href={toTelHref(n)} className="text-sm font-semibold text-[#F27A1A] hover:text-[#D4600E] transition-colors whitespace-nowrap">
+                        {n}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Email + Address */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              {EMAIL_ROWS.map(({ label, email }, i) => (
+                <div
+                  key={label}
+                  className={`flex items-start gap-x-4 px-5 py-4 ${i < EMAIL_ROWS.length - 1 ? "border-b border-gray-50" : ""}`}
                 >
                   <div className="w-9 h-9 rounded-lg bg-[#FFF3E6] flex items-center justify-center text-[#F27A1A] flex-shrink-0 mt-0.5">
-                    {icon}
+                    {emailIcon}
                   </div>
                   <div className="flex flex-col gap-y-0.5">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
                       {label}
                     </span>
-                    {content}
+                    <a href={`mailto:${email}`} className="text-sm font-medium text-[#1A1A1A] hover:text-[#F27A1A] transition-colors">
+                      {email}
+                    </a>
                   </div>
                 </div>
               ))}
+              <div className="flex items-start gap-x-4 px-5 py-4 border-t border-gray-50">
+                <div className="w-9 h-9 rounded-lg bg-[#FFF3E6] flex items-center justify-center text-[#F27A1A] flex-shrink-0 mt-0.5">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <div className="flex flex-col gap-y-0.5">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                    Adresă
+                  </span>
+                  <span className="text-sm font-medium text-[#1A1A1A]">
+                    Str. Plevenei nr. 3, Sighetu Marmației
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* Schedule */}

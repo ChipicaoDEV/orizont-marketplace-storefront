@@ -42,7 +42,8 @@ const TOPICS = [
     ),
     title: "Comenzi",
     desc: "Urmărire, modificări, anulări",
-    href: "tel:0262310960",
+    href: "tel:0730076606",
+    contact: "0730 076 606",
   },
   {
     icon: (
@@ -54,6 +55,7 @@ const TOPICS = [
     title: "Livrare",
     desc: "Termene, zone, programare",
     href: "/livrare",
+    contact: null,
   },
   {
     icon: (
@@ -64,7 +66,8 @@ const TOPICS = [
     ),
     title: "Returnări",
     desc: "Politică, procedură, ramburs",
-    href: "mailto:office@orizont-srl.ro",
+    href: "mailto:comenzi@orizont-srl.ro",
+    contact: "comenzi@orizont-srl.ro",
   },
   {
     icon: (
@@ -75,7 +78,8 @@ const TOPICS = [
     ),
     title: "Produse & Stoc",
     desc: "Disponibilitate, specificații",
-    href: "tel:0262310960",
+    href: "tel:0730076606",
+    contact: "0730 076 606",
   },
   {
     icon: (
@@ -86,7 +90,8 @@ const TOPICS = [
     ),
     title: "Facturare & Plăți",
     desc: "Facturi, metode de plată",
-    href: "mailto:office@orizont-srl.ro",
+    href: "mailto:comenzi@orizont-srl.ro",
+    contact: "comenzi@orizont-srl.ro",
   },
   {
     icon: (
@@ -97,9 +102,25 @@ const TOPICS = [
     ),
     title: "Consultanță tehnică",
     desc: "Alegerea materialelor potrivite",
-    href: "tel:0262310960",
+    href: "tel:0729148110",
+    contact: "0729 148 110",
   },
 ]
+
+const PHONE_DEPTS = [
+  { label: "Comenzi", numbers: ["0730 076 606"] },
+  { label: "Obiecte sanitare, gresie și faianță", numbers: ["0730 076 593"] },
+  { label: "Materiale de construcții", numbers: ["0729 148 110", "0755 612 281"] },
+  { label: "Finisaje", numbers: ["0730 076 597", "0730 076 593"] },
+  { label: "Instalații sanitare", numbers: ["0730 076 595"] },
+  { label: "Instalații electrice", numbers: ["0730 076 595"] },
+  { label: "Scule și echipamente", numbers: ["0730 076 595"] },
+  { label: "Amenajări exterioare", numbers: ["0729 148 110"] },
+]
+
+function toTelHref(num: string) {
+  return "tel:" + num.replace(/\s/g, "")
+}
 
 export default function CustomerServicePage() {
   return (
@@ -121,7 +142,7 @@ export default function CustomerServicePage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
           {/* Phone */}
           <a
-            href="tel:0262310960"
+            href="tel:0730076606"
             className="group flex flex-col items-center gap-y-3 p-6 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md hover:border-[#F27A1A] transition-all duration-200 text-center"
           >
             <div className="w-12 h-12 rounded-full bg-[#FFF3E6] flex items-center justify-center text-[#F27A1A] group-hover:bg-[#F27A1A] group-hover:text-white transition-colors duration-200">
@@ -131,9 +152,8 @@ export default function CustomerServicePage() {
               </svg>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Telefon</p>
-              <p className="text-sm font-semibold text-[#1A1A1A]">0262-310960</p>
-              <p className="text-sm font-semibold text-[#1A1A1A]">0262-310990</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Telefon comenzi</p>
+              <p className="text-sm font-semibold text-[#1A1A1A]">0730 076 606</p>
             </div>
             <span className="mt-1 inline-flex items-center gap-x-1 text-xs font-medium text-[#F27A1A]">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -143,7 +163,7 @@ export default function CustomerServicePage() {
 
           {/* Email */}
           <a
-            href="mailto:office@orizont-srl.ro"
+            href="mailto:comenzi@orizont-srl.ro"
             className="group flex flex-col items-center gap-y-3 p-6 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md hover:border-[#F27A1A] transition-all duration-200 text-center"
           >
             <div className="w-12 h-12 rounded-full bg-[#FFF3E6] flex items-center justify-center text-[#F27A1A] group-hover:bg-[#F27A1A] group-hover:text-white transition-colors duration-200">
@@ -154,7 +174,7 @@ export default function CustomerServicePage() {
             </div>
             <div>
               <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Email</p>
-              <p className="text-sm font-semibold text-[#1A1A1A]">office@orizont-srl.ro</p>
+              <p className="text-sm font-semibold text-[#1A1A1A]">comenzi@orizont-srl.ro</p>
             </div>
             <span className="mt-1 text-xs text-gray-400">Răspuns în max. 24h</span>
           </a>
@@ -185,8 +205,8 @@ export default function CustomerServicePage() {
         <div className="mb-12">
           <h2 className="text-lg font-bold text-[#1A1A1A] mb-1">Cu ce te putem ajuta?</h2>
           <p className="text-sm text-gray-500 mb-5">Alege un subiect și te redirecționăm rapid.</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {TOPICS.map(({ icon, title, desc, href }) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+            {TOPICS.map(({ icon, title, desc, href, contact }) => (
               <a
                 key={title}
                 href={href}
@@ -198,8 +218,37 @@ export default function CustomerServicePage() {
                 <div>
                   <p className="text-sm font-semibold text-[#1A1A1A] leading-tight">{title}</p>
                   <p className="text-xs text-gray-400 mt-0.5 leading-tight">{desc}</p>
+                  {contact && (
+                    <p className="text-xs font-semibold text-[#F27A1A] mt-1.5 leading-tight">{contact}</p>
+                  )}
                 </div>
               </a>
+            ))}
+          </div>
+
+          {/* Phone directory */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="flex items-center gap-x-3 px-5 py-3.5 border-b border-gray-100">
+              <svg className="w-4 h-4 text-[#F27A1A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Telefoane departamente</span>
+            </div>
+            {PHONE_DEPTS.map(({ label, numbers }, i) => (
+              <div
+                key={label}
+                className={`flex items-start justify-between gap-x-4 px-5 py-3 ${i < PHONE_DEPTS.length - 1 ? "border-b border-gray-50" : ""}`}
+              >
+                <span className="text-sm text-gray-500 flex-1">{label}</span>
+                <div className="flex flex-col items-end gap-y-0.5">
+                  {numbers.map(n => (
+                    <a key={n} href={toTelHref(n)} className="text-sm font-semibold text-[#F27A1A] hover:text-[#D4600E] transition-colors whitespace-nowrap">
+                      {n}
+                    </a>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -267,28 +316,16 @@ export default function CustomerServicePage() {
                 Echipa noastră răspunde rapid în orele de program.
               </p>
             </div>
-            <div className="flex flex-col gap-y-2">
-              <a
-                href="tel:0262310960"
-                className="flex items-center justify-center gap-x-2 w-full h-10 rounded-xl bg-white text-[#F27A1A] text-sm font-bold hover:bg-orange-50 transition-colors duration-150"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                0262-310960
-              </a>
-              <a
-                href="tel:0262310990"
-                className="flex items-center justify-center gap-x-2 w-full h-10 rounded-xl bg-white/20 text-white text-sm font-semibold hover:bg-white/30 transition-colors duration-150"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                0262-310990
-              </a>
-            </div>
+            <a
+              href="tel:0730076606"
+              className="flex items-center justify-center gap-x-2 w-full h-10 rounded-xl bg-white text-[#F27A1A] text-sm font-bold hover:bg-orange-50 transition-colors duration-150"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              0730 076 606
+            </a>
           </div>
         </div>
 
