@@ -250,7 +250,7 @@ export default function CereOfertaForm({ product, selectedVariantId }: Props) {
 
           {/* WhatsApp */}
           <a
-            href="https://wa.me/40730076606"
+            href={"https://wa.me/40730076606?text=" + encodeURIComponent("Bună ziua, aș dori o ofertă pentru produsul https://orizont-srl.ro/products/" + product.handle)}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full h-11 flex items-center justify-center gap-x-2 rounded-xl text-sm font-semibold bg-[#25D366] hover:bg-[#1ebe5d] text-white transition-colors duration-150"
