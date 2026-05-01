@@ -7,19 +7,28 @@ type PdpTabsProps = {
   product: HttpTypes.StoreProduct
 }
 
-// Keys stored internally that shouldn't appear in the "Specificații tehnice" table
+type Guide = { name: string; url: string }
+
 const HIDDEN_META_KEYS = new Set([
   "brand",
   "pricing_unit",
   "packaging",
   "vendor",
   "_score",
+  "guides",
 ])
 
-const TABS = ["Descriere", "Specificații tehnice", "Livrare"] as const
-type Tab = (typeof TABS)[number]
+const BASE_TABS = ["Descriere", "Specificații tehnice", "Livrare"] as const
+const GUIDES_TAB = "Ghiduri și informații utile" as const
+type Tab = typeof BASE_TABS[number] | typeof GUIDES_TAB | ""
 
 const PdpTabs = ({ product }: PdpTabsProps) => {
+  const guides: Guide[] = Array.isArray((product.metadata as any)?.guides)
+    ? ((product.metadata as any).guides as Guide[])
+    : []
+
+  const tabs: Tab[] = guides.length > 0 ? [...BASE_TABS, GUIDES_TAB] : [...BASE_TABS]
+
   const [activeTab, setActiveTab] = useState<Tab>("Descriere")
 
   const specEntries = Object.entries(product.metadata ?? {}).filter(
@@ -31,15 +40,15 @@ const PdpTabs = ({ product }: PdpTabsProps) => {
       {/* ── Desktop: horizontal tabs ── */}
       <div className="hidden sm:block border-b border-gray-200">
         <div className="flex gap-x-0">
-          {TABS.map((tab) => (
+          {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-5 py-3 text-sm font-semibold border-b-2 transition-colors duration-150 -mb-px ${
+              className={"px-5 py-3 text-sm font-semibold border-b-2 transition-colors duration-150 -mb-px " + (
                 activeTab === tab
                   ? "border-[#F27A1A] text-[#F27A1A]"
                   : "border-transparent text-gray-500 hover:text-[#1A1A1A] hover:border-gray-300"
-              }`}
+              )}
             >
               {tab}
             </button>
@@ -49,21 +58,21 @@ const PdpTabs = ({ product }: PdpTabsProps) => {
 
       {/* ── Mobile: accordion ── */}
       <div className="sm:hidden flex flex-col divide-y divide-gray-100 border-t border-gray-100">
-        {TABS.map((tab) => (
+        {tabs.map((tab) => (
           <MobileSection
             key={tab}
             label={tab}
             open={activeTab === tab}
-            onToggle={() => setActiveTab(activeTab === tab ? ("" as Tab) : tab)}
+            onToggle={() => setActiveTab(activeTab === tab ? "" : tab)}
           >
-            <TabContent tab={tab} product={product} specEntries={specEntries} />
+            <TabContent tab={tab} product={product} specEntries={specEntries} guides={guides} />
           </MobileSection>
         ))}
       </div>
 
       {/* ── Desktop: tab content ── */}
       <div className="hidden sm:block pt-6">
-        <TabContent tab={activeTab} product={product} specEntries={specEntries} />
+        <TabContent tab={activeTab} product={product} specEntries={specEntries} guides={guides} />
       </div>
     </div>
   )
@@ -91,7 +100,7 @@ function MobileSection({
       >
         {label}
         <svg
-          className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={"w-4 h-4 text-gray-400 transition-transform duration-200 " + (open ? "rotate-180" : "")}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -110,10 +119,12 @@ function TabContent({
   tab,
   product,
   specEntries,
+  guides,
 }: {
-  tab: Tab | ""
+  tab: Tab
   product: HttpTypes.StoreProduct
   specEntries: [string, unknown][]
+  guides: Guide[]
 }) {
   if (tab === "Descriere") {
     return (
@@ -198,11 +209,41 @@ function TabContent({
             <p className="font-semibold text-[#1A1A1A] mb-1">Retururi</p>
             <p className="text-gray-500 leading-relaxed">
               Poți returna produsele în termen de 14 zile de la primire, dacă sunt în starea originală
-              și ambalajul este intact. Contactează-ne la <span className="text-[#F27A1A]">contact@orizont.ro</span> pentru
+              și ambalajul este intact. Contactează-ne la <span className="text-[#F27A1A]">comenzi@orizont-srl.ro</span> pentru
               a iniția un retur.
             </p>
           </div>
         </div>
+      </div>
+    )
+  }
+
+  if (tab === "Ghiduri și informații utile") {
+    return (
+      <div className="flex flex-col gap-y-3">
+        {guides.map((g, i) => (
+          <a
+            key={i}
+            href={g.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-x-4 p-4 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md hover:border-[#F27A1A] transition-all duration-200 group"
+          >
+            <div className="w-10 h-10 rounded-lg bg-[#FFF3E6] flex items-center justify-center text-[#F27A1A] flex-shrink-0 group-hover:bg-[#F27A1A] group-hover:text-white transition-colors duration-150">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <span className="flex-1 text-sm font-medium text-[#1A1A1A] group-hover:text-[#F27A1A] transition-colors duration-150">
+              {g.name}
+            </span>
+            <svg className="w-4 h-4 text-gray-400 flex-shrink-0 group-hover:text-[#F27A1A] transition-colors duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+        ))}
       </div>
     )
   }
