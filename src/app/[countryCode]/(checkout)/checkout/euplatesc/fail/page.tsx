@@ -111,8 +111,8 @@ export default async function EuplatescFailPage({ params, searchParams }: Props)
       {/* Help text */}
       <p className="text-center text-xs text-gray-400 mt-6">
         Dacă problema persistă, contactează-ne la{" "}
-        <a href="mailto:contact@orizont.ro" className="text-[#F27A1A] hover:underline">
-          contact@orizont.ro
+        <a href="mailto:comenzi@orizont-srl.ro" className="text-[#F27A1A] hover:underline">
+          comenzi@orizont-srl.ro
         </a>
       </p>
     </div>
