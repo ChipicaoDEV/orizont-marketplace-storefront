@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import AvailabilityBadge from "@modules/layout/components/availability-badge"
 
 export const metadata: Metadata = {
   title: "Serviciu Clienți | Orizont",
@@ -155,10 +156,7 @@ export default function CustomerServicePage() {
               <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Telefon comenzi</p>
               <p className="text-sm font-semibold text-[#1A1A1A]">0730 076 606</p>
             </div>
-            <span className="mt-1 inline-flex items-center gap-x-1 text-xs font-medium text-[#F27A1A]">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Disponibil acum
-            </span>
+            <AvailabilityBadge />
           </a>
 
           {/* Email */}
@@ -194,7 +192,7 @@ export default function CustomerServicePage() {
             </div>
             <div>
               <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Vizitează-ne</p>
-              <p className="text-sm font-semibold text-[#1A1A1A]">Str. Plevenei nr. 3</p>
+              <p className="text-sm font-semibold text-[#1A1A1A]">Str. Plevnei nr. 3</p>
               <p className="text-sm text-gray-500">Sighetu Marmației</p>
             </div>
             <span className="mt-1 text-xs text-gray-400">Vezi pe hartă →</span>

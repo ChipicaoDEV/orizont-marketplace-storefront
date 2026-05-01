@@ -9,7 +9,7 @@ const SECTIONS = [
   {
     title: "1. Definiții",
     content: `În sensul prezentului document, termenii de mai jos au următoarele semnificații:
-• „Orizont" sau „Societatea" — SC Orizont SRL, cu sediul în Str. Plevenei nr. 3, Sighetu Marmației.
+• „Orizont" sau „Societatea" — SC Orizont Sighetu Marmației SRL, cu sediul în Str. Plevnei nr. 3, Sighetu Marmației.
 • „Client" — orice persoană fizică sau juridică care accesează platforma și/sau plasează o comandă.
 • „Platformă" — site-ul web accesibil la adresa orizont-srl.ro și toate paginile aferente.
 • „Produse" — bunurile prezentate spre vânzare pe Platformă.`,
@@ -22,7 +22,7 @@ const SECTIONS = [
     title: "3. Plasarea comenzilor",
     content: `Comenzile pot fi plasate:
 • online, prin intermediul Platformei, după crearea unui cont și autentificare;
-• telefonic, la numerele 0262-310960 și 0262-310990, în programul de lucru.
+• telefonic, la numărul 0730 076 606, în programul de lucru.
 
 Comanda devine fermă numai după confirmarea în scris (e-mail) sau verbală (telefon) din partea unui reprezentant Orizont. Orizont își rezervă dreptul de a refuza sau anula orice comandă în cazul unor erori de preț sau indisponibilitate a stocului.`,
   },
@@ -111,13 +111,9 @@ export default function TermeniPage() {
           <a href="mailto:comenzi@orizont-srl.ro" className="text-[#F27A1A] font-medium hover:underline">
             comenzi@orizont-srl.ro
           </a>{" "}
-          sau la numerele{" "}
-          <a href="tel:0262310960" className="text-[#F27A1A] font-medium hover:underline">
-            0262-310960
-          </a>{" "}
-          /{" "}
-          <a href="tel:0262310990" className="text-[#F27A1A] font-medium hover:underline">
-            0262-310990
+          sau la numărul{" "}
+          <a href="tel:0730076606" className="text-[#F27A1A] font-medium hover:underline">
+            0730 076 606
           </a>.
         </div>
       </div>

@@ -105,7 +105,7 @@ export default function StepDeliveryMethod() {
           onSelect={() => setSelected("pickup")}
           title="Ridicare Personală"
           description="Ridici comanda din magazinul nostru."
-          detail="Adresa magazinului: Str. Plevenei nr. 3, Sighetu Marmatiei. Program: L–V 8:00–18:00"
+          detail="Adresa magazinului: Str. Plevnei nr. 3, Sighetu Marmatiei. Program: L–V 8:00–18:00"
           icon={
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path

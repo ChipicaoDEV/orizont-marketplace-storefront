@@ -20,7 +20,7 @@ Termenul de 14 zile începe din ziua în care dvs. sau o terță parte desemnat�
 
 Puteți folosi formularul standard de retragere de mai jos sau orice altă declarație neechivocă. Ne veți notifica înainte de expirarea termenului de 14 zile.
 
-După confirmare, returnați produsul la adresa: Str. Plevenei nr. 3, Sighetu Marmației, în termen de maximum 14 zile de la notificare.`,
+După confirmare, returnați produsul la adresa: Str. Plevnei nr. 3, Sighetu Marmației, în termen de maximum 14 zile de la notificare.`,
   },
   {
     title: "3. Condiții pentru retur",

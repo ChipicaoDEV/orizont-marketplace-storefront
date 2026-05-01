@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 const SECTIONS = [
   {
     title: "1. Cine suntem",
-    content: `Operatorul datelor cu caracter personal este SC ORIZONT SIGHETU MARMATIEI SRL, cu sediul în Str. Plevenei nr. 3, Sighetu Marmației, înregistrată la Registrul Comerțului Maramureș sub nr. J1991000461241, CIF RO 2204805 (denumită în continuare „Orizont").
+    content: `Operatorul datelor cu caracter personal este SC ORIZONT SIGHETU MARMATIEI SRL, cu sediul în Str. Plevnei nr. 3, Sighetu Marmației, înregistrată la Registrul Comerțului Maramureș sub nr. J1991000461241, CIF RO 2204805 (denumită în continuare „Orizont").
 
 Ne puteți contacta la:
 • E-mail: comenzi@orizont-srl.ro

@@ -112,7 +112,7 @@ export default function ContactPage() {
                     Adresă
                   </span>
                   <span className="text-sm font-medium text-[#1A1A1A]">
-                    Str. Plevenei nr. 3, Sighetu Marmației
+                    Str. Plevnei nr. 3, Sighetu Marmației
                   </span>
                 </div>
               </div>

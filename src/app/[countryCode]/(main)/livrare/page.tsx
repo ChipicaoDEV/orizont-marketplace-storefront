@@ -91,7 +91,7 @@ export default function LivrarePage() {
                     </svg>
                   ),
                   title: "Ridicare din depozit",
-                  desc: "Puteți ridica comanda direct din depozitul nostru din Str. Plevenei nr. 3, Sighetu Marmației, în programul de lucru.",
+                  desc: "Puteți ridica comanda direct din depozitul nostru din Str. Plevnei nr. 3, Sighetu Marmației, în programul de lucru.",
                 },
               ].map(({ icon, title, desc }) => (
                 <div key={title} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col gap-y-2">
@@ -131,12 +131,8 @@ export default function LivrarePage() {
             </svg>
             <p className="text-sm text-[#1A1A1A]">
               Pentru comenzi mari sau transport special, vă rugăm să ne contactați la{" "}
-              <a href="tel:0262310960" className="font-semibold text-[#F27A1A] hover:underline">
-                0262-310960
-              </a>{" "}
-              sau{" "}
-              <a href="tel:0262310990" className="font-semibold text-[#F27A1A] hover:underline">
-                0262-310990
+              <a href="tel:0730076606" className="font-semibold text-[#F27A1A] hover:underline">
+                0730 076 606
               </a>.
             </p>
           </div>

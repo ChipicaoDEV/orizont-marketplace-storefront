@@ -8,12 +8,12 @@ export const metadata: Metadata = {
 const SECTIONS = [
   {
     title: "1. Identitatea operatorului",
-    content: `SC Orizont Sighetu Marmației SRL, cu sediul în Str. Plevenei nr. 3, Sighetu Marmației, județul Maramureș, CIF RO 2204805, înregistrată la Registrul Comerțului sub nr. J24/461/1991, în calitate de operator de date cu caracter personal, prelucrează datele tale în conformitate cu Regulamentul (UE) 2016/679 privind protecția persoanelor fizice în ceea ce privește prelucrarea datelor cu caracter personal (GDPR) și cu legislația națională aplicabilă.
+    content: `SC Orizont Sighetu Marmației SRL, cu sediul în Str. Plevnei nr. 3, Sighetu Marmației, județul Maramureș, CIF RO 2204805, înregistrată la Registrul Comerțului sub nr. J24/461/1991, în calitate de operator de date cu caracter personal, prelucrează datele tale în conformitate cu Regulamentul (UE) 2016/679 privind protecția persoanelor fizice în ceea ce privește prelucrarea datelor cu caracter personal (GDPR) și cu legislația națională aplicabilă.
 
 Ne poți contacta la:
 • E-mail: comenzi@orizont-srl.ro
 • Telefon: 0730 076 606
-• Adresă: Str. Plevenei nr. 3, Sighetu Marmației, județul Maramureș`,
+• Adresă: Str. Plevnei nr. 3, Sighetu Marmației, județul Maramureș`,
   },
   {
     title: "2. Ce date colectăm",
