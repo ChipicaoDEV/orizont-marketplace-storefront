@@ -66,6 +66,7 @@ const PdpActions = ({ product }: PdpActionsProps) => {
 
   // ── Price ───────────────────────────────────────────────────────────────────
   const { cheapestPrice, variantPrice } = getProductPrice({ product, variantId: selectedVariant?.id })
+  const isPriceOnRequest = cheapestPrice === null
   const displayPrice = variantPrice ?? cheapestPrice
   const amount = displayPrice?.calculated_price_number ?? null
   const compareAt = displayPrice?.original_price_number ?? null
@@ -145,7 +146,7 @@ const PdpActions = ({ product }: PdpActionsProps) => {
           size="lg"
         />
       ) : (
-        <span className="text-base text-gray-400 italic">Preț indisponibil</span>
+        <span className="text-xs font-semibold uppercase tracking-wide text-[#F27A1A]">Preț la cerere</span>
       )}
 
       {/* ── Stock badge ── */}
@@ -164,7 +165,7 @@ const PdpActions = ({ product }: PdpActionsProps) => {
       )}
 
       {/* ── Quantity + Add to cart ── */}
-      <div className="flex flex-col gap-y-3">
+      {!isPriceOnRequest && <div className="flex flex-col gap-y-3">
         {/* Quantity selector — only shown when variant is selected and in stock */}
         {selectedVariant && !isOutOfStock && (
           <div className="flex items-center gap-x-3">
@@ -244,7 +245,7 @@ const PdpActions = ({ product }: PdpActionsProps) => {
             )}
           </button>
         )}
-      </div>
+      </div>}
 
       {/* Cere Ofertă */}
       <CereOfertaForm product={product} selectedVariantId={selectedVariant?.id} />
