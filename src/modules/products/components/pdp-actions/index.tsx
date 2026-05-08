@@ -28,9 +28,10 @@ const optionsAsKeymap = (
 
 type PdpActionsProps = {
   product: HttpTypes.StoreProduct
+  onVariantChange?: (variant: HttpTypes.StoreProductVariant | undefined) => void
 }
 
-const PdpActions = ({ product }: PdpActionsProps) => {
+const PdpActions = ({ product, onVariantChange }: PdpActionsProps) => {
   const { countryCode } = useParams() as { countryCode: string }
   const [isPending, startTransition] = useTransition()
   const [quantity, setQuantity] = useState(1)
@@ -52,6 +53,11 @@ const PdpActions = ({ product }: PdpActionsProps) => {
       isEqual(optionsAsKeymap(v.options), options)
     ) as (HttpTypes.StoreProductVariant & { inventory_quantity?: number; manage_inventory?: boolean; allow_backorder?: boolean }) | undefined
   }, [product.variants, options])
+
+  // Notify parent when selected variant changes
+  useEffect(() => {
+    onVariantChange?.(selectedVariant)
+  }, [selectedVariant])
 
   // ── Stock ───────────────────────────────────────────────────────────────────
   const stockQty = getVariantQuantity(selectedVariant as any)

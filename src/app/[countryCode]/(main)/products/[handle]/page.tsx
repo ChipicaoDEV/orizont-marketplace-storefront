@@ -9,7 +9,6 @@ export const dynamic = 'force-dynamic'
 
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>
-  searchParams: Promise<{ v_id?: string }>
 }
 
 export async function generateStaticParams() {
@@ -54,23 +53,6 @@ export async function generateStaticParams() {
   }
 }
 
-function getImagesForVariant(
-  product: HttpTypes.StoreProduct,
-  selectedVariantId?: string
-) {
-  if (!selectedVariantId || !product.variants) {
-    return product.images
-  }
-
-  const variant = product.variants!.find((v) => v.id === selectedVariantId)
-  if (!variant || !variant.images?.length) {
-    return product.images
-  }
-
-  const imageIdsMap = new Map(variant.images.map((i) => [i.id, true]))
-  return product.images!.filter((i) => imageIdsMap.has(i.id))
-}
-
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
   const { handle } = params
@@ -110,9 +92,6 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function ProductPage(props: Props) {
   const params = await props.params
   const region = await getRegion(params.countryCode)
-  const searchParams = await props.searchParams
-
-  const selectedVariantId = searchParams.v_id
 
   if (!region) {
     notFound()
@@ -123,7 +102,7 @@ export default async function ProductPage(props: Props) {
     queryParams: {
       handle: params.handle,
       fields:
-        "*variants.calculated_price,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder,+metadata,+tags,+categories",
+        "*variants.calculated_price,*variants.images,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder,+metadata,+tags,+categories",
     },
   }).then(({ response }) => response.products[0])
 
@@ -131,14 +110,11 @@ export default async function ProductPage(props: Props) {
     notFound()
   }
 
-  const images = getImagesForVariant(pricedProduct, selectedVariantId)
-
   return (
     <ProductTemplate
       product={pricedProduct}
       region={region}
       countryCode={params.countryCode}
-      images={images}
     />
   )
 }
