@@ -11,6 +11,8 @@ import { useParams, usePathname, useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
 import MobileActions from "./mobile-actions"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import { getProductPrice } from "@lib/util/get-product-price"
 import { useRouter } from "next/navigation"
 
 type ProductActionsProps = {
@@ -39,6 +41,8 @@ export default function ProductActions({
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
   const [isAdding, setIsAdding] = useState(false)
   const countryCode = useParams().countryCode as string
+  const { cheapestPrice } = getProductPrice({ product })
+  const isPriceOnRequest = !cheapestPrice
 
   // If there is only 1 variant, preselect the options
   useEffect(() => {
@@ -160,39 +164,56 @@ export default function ProductActions({
           )}
         </div>
 
-        <ProductPrice product={product} variant={selectedVariant} />
-
-        <Button
-          onClick={handleAddToCart}
-          disabled={
-            !inStock ||
-            !selectedVariant ||
-            !!disabled ||
-            isAdding ||
-            !isValidVariant
-          }
-          variant="primary"
-          className="w-full h-10"
-          isLoading={isAdding}
-          data-testid="add-product-button"
-        >
-          {!selectedVariant && !options
-            ? "Select variant"
-            : !inStock || !isValidVariant
-            ? "Out of stock"
-            : "Add to cart"}
-        </Button>
-        <MobileActions
-          product={product}
-          variant={selectedVariant}
-          options={options}
-          updateOptions={setOptionValue}
-          inStock={inStock}
-          handleAddToCart={handleAddToCart}
-          isAdding={isAdding}
-          show={!inView}
-          optionsDisabled={!!disabled || isAdding}
-        />
+        {isPriceOnRequest ? (
+          <div className="flex flex-col gap-y-3 mt-2">
+            <p className="text-sm text-gray-500">Contactă-ne pentru un preț personalizat pentru acest produs.</p>
+            <LocalizedClientLink
+              href={`/cerere-oferta?produs=${product.handle}`}
+              className="w-full flex items-center justify-center gap-x-2 px-4 py-3 rounded-lg text-sm font-semibold bg-[#F27A1A] text-white hover:bg-[#e06a10] transition-colors duration-150"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              Cere Ofertă
+            </LocalizedClientLink>
+          </div>
+        ) : (
+          <>
+            <ProductPrice product={product} variant={selectedVariant} />
+            <Button
+              onClick={handleAddToCart}
+              disabled={
+                !inStock ||
+                !selectedVariant ||
+                !!disabled ||
+                isAdding ||
+                !isValidVariant
+              }
+              variant="primary"
+              className="w-full h-10"
+              isLoading={isAdding}
+              data-testid="add-product-button"
+            >
+              {!selectedVariant && !options
+                ? "Select variant"
+                : !inStock || !isValidVariant
+                ? "Out of stock"
+                : "Add to cart"}
+            </Button>
+            <MobileActions
+              product={product}
+              variant={selectedVariant}
+              options={options}
+              updateOptions={setOptionValue}
+              inStock={inStock}
+              handleAddToCart={handleAddToCart}
+              isAdding={isAdding}
+              show={!inView}
+              optionsDisabled={!!disabled || isAdding}
+              priceOnRequest={false}
+            />
+          </>
+        )}
       </div>
     </>
   )

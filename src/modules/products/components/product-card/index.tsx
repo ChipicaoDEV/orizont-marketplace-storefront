@@ -101,30 +101,41 @@ const ProductCard = ({ product, region }: ProductCardProps) => {
         {/* Stock */}
         <StockBadge quantity={quantity} />
 
-        {/* Price */}
-        <div className="mt-auto pt-2">
-          {amount != null ? (
-            <PriceDisplay
-              amount={amount}
-              unit={pricingUnit}
-              compareAtPrice={isSale ? compareAt : null}
-            />
-          ) : (
-            <span className="text-sm text-gray-400 italic">Preț indisponibil</span>
-          )}
-        </div>
-
-        {/* Add to cart */}
-        <div className="pt-1">
-          <AddToCartButton
-            variantId={directVariantId}
-            disabled={isOutOfStock}
-            productHandle={product.handle ?? ""}
-            productTitle={product.title ?? ""}
-            productThumbnail={product.thumbnail ?? null}
-            productPrice={amount}
-          />
-        </div>
+        {amount != null ? (
+          <>
+            <div className="mt-auto pt-2">
+              <PriceDisplay
+                amount={amount}
+                unit={pricingUnit}
+                compareAtPrice={isSale ? compareAt : null}
+              />
+            </div>
+            <div className="pt-1">
+              <AddToCartButton
+                variantId={directVariantId}
+                disabled={isOutOfStock}
+                productHandle={product.handle ?? ""}
+                productTitle={product.title ?? ""}
+                productThumbnail={product.thumbnail ?? null}
+                productPrice={amount}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="mt-auto pt-2">
+              <span className="text-xs font-semibold uppercase tracking-wide text-[#F27A1A]">Preț la cerere</span>
+            </div>
+            <div className="pt-1">
+              <LocalizedClientLink
+                href={`/cerere-oferta?produs=${product.handle}`}
+                className="w-full flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-semibold border-2 border-[#F27A1A] text-[#F27A1A] hover:bg-[#F27A1A] hover:text-white transition-colors duration-150"
+              >
+                Cere Ofertă
+              </LocalizedClientLink>
+            </div>
+          </>
+        )}
       </div>
     </article>
   )
