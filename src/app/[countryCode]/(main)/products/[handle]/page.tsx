@@ -102,7 +102,7 @@ export default async function ProductPage(props: Props) {
     queryParams: {
       handle: params.handle,
       fields:
-        "*variants.calculated_price,*variants.images,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder,+metadata,+tags,+categories",
+        "*variants.calculated_price,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder,+variants.metadata,+metadata,+tags,+categories",
     },
   }).then(({ response }) => response.products[0])
 

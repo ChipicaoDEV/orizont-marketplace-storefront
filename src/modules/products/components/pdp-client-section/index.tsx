@@ -17,9 +17,9 @@ const PdpClientSection = ({ product }: Props) => {
 
   const displayImages = useMemo(() => {
     const v = selectedVariant as any
-    if (v?.images?.length) {
-      const ids = new Set(v.images.map((i: any) => i.id))
-      return (product.images ?? []).filter((i) => ids.has(i.id))
+    const metaImages: { url: string }[] | undefined = v?.metadata?.images
+    if (metaImages?.length) {
+      return metaImages.map((img, idx) => ({ id: `variant-img-${idx}`, url: img.url }))
     }
     return product.images ?? []
   }, [selectedVariant, product.images])
