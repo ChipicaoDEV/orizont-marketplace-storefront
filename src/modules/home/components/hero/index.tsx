@@ -79,11 +79,11 @@ const Hero = () => {
   return (
     <section className="w-full bg-white">
       <div className="content-container py-6 sm:py-8 lg:py-10">
-        <div className="flex flex-col lg:flex-row gap-4 xl:gap-6 min-h-[400px] lg:h-[500px]">
+        <div className="flex flex-col lg:flex-row gap-4 xl:gap-6 lg:h-[500px]">
 
           {/* ── Main Carousel (70-75% width on LG+) ── */}
           <div
-            className="flex-1 relative overflow-hidden rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 group"
+            className="flex-1 relative overflow-hidden rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 group aspect-[16/9] lg:aspect-auto"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
