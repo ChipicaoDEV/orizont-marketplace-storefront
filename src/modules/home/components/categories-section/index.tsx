@@ -7,7 +7,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 // Add an entry here when a new top-level category is created in admin.
 const CATEGORY_ASSETS: Record<string, { image: string; color: string }> = {
   "materiale-de-constructii":  { image: "/categorii/Materiale-construcții.jpg",  color: "#E65100" },
-  "acoperisuri-si-sisteme-pluviale":    { image: "/categorii/acoperisuri-si-sisteme-pluviale.jpg",     color: "#4527A0" },
+  "acoperisuri-si-sisteme":    { image: "/categorii/acoperisuri-si-sisteme-pluviale.jpg",     color: "#4527A0" },
   "finisaje":                  { image: "/categorii/Finisaje.jpg",                color: "#00838F" },
   "instalatii-sanitare":       { image: "/categorii/Instalații-sanitare.jpg",     color: "#1565C0" },
   "instalatii-electrice":      { image: "/categorii/Instalații-electrice.jpg",    color: "#F57F17" },
