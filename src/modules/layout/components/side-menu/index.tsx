@@ -14,93 +14,6 @@ import LanguageSelect from "../language-select"
 import { HttpTypes } from "@medusajs/types"
 import { Locale } from "@lib/data/locales"
 
-const CATEGORIES = [
-  {
-    name: "Materiale de construcții",
-    slug: "materiale-de-constructii",
-    subcategories: [
-      { name: "Armături și fundații",     slug: "armaturi-si-fundatii" },
-      { name: "Produse metalurgice",       slug: "produse-metalurgice" },
-      { name: "Țevi și profile",           slug: "tevi-si-profile" },
-      { name: "Materiale prăfoase",        slug: "materiale-prafoase" },
-      { name: "Termoizolații",             slug: "termoizolatii" },
-      { name: "Hidroizolații și etanșări", slug: "hidroizolatii-si-etansari" },
-      { name: "Utilaje și echipamente",    slug: "utilaje-si-echipamente" },
-      { name: "Produse din lemn",          slug: "produse-din-lemn" },
-    ],
-  },
-  {
-    name: "Acoperișuri și sisteme",
-    slug: "acoperisuri-si-sisteme",
-    subcategories: [
-      { name: "Țiglă ceramică și beton",  slug: "tigla-ceramica-si-beton" },
-      { name: "Tablă pentru acoperiș",    slug: "tabla-pentru-acoperis" },
-      { name: "Membrane bituminoase",     slug: "membrane-bituminoase" },
-      { name: "Jgheaburi și burlane",     slug: "jgheaburi-si-burlane" },
-      { name: "Accesorii acoperiș",       slug: "accesorii-acoperis" },
-    ],
-  },
-  {
-    name: "Finisaje",
-    slug: "finisaje",
-    subcategories: [
-      { name: "Vopsele și grunduri",          slug: "vopsele-si-grunduri" },
-      { name: "Tencuieli decorative",         slug: "tencuieli-decorative" },
-      { name: "Glet și șpaclu",               slug: "glet-si-spaclu" },
-      { name: "Gresie și faianță",            slug: "gresie-si-faianta" },
-      { name: "Parchet și laminat",           slug: "parchet-si-laminat" },
-      { name: "Plăci și panouri decorative",  slug: "placi-si-panouri-decorative" },
-      { name: "Adezivi și chituri finisaje",  slug: "adezivi-si-chituri-finisaje" },
-    ],
-  },
-  {
-    name: "Instalații sanitare",
-    slug: "instalatii-sanitare",
-    subcategories: [
-      { name: "Țevi și fitinguri",        slug: "tevi-si-fitinguri" },
-      { name: "Robineți și racorduri",    slug: "robineti-si-racorduri" },
-      { name: "Obiecte sanitare",         slug: "obiecte-sanitare" },
-      { name: "Canalizare interioară",    slug: "canalizare-interioara" },
-      { name: "Canalizare exterioară",    slug: "canalizare-exterioara" },
-      { name: "Cămine de inspecție",      slug: "camine-de-inspectie" },
-      { name: "Sisteme de încălzire",     slug: "sisteme-de-incalzire" },
-    ],
-  },
-  {
-    name: "Instalații electrice",
-    slug: "instalatii-electrice",
-    subcategories: [
-      { name: "Cabluri și conductori",          slug: "cabluri-si-conductori" },
-      { name: "Prize și întrerupătoare",        slug: "prize-si-intrerupatoare" },
-      { name: "Tablouri electrice",             slug: "tablouri-electrice" },
-      { name: "Corpuri de iluminat",            slug: "corpuri-de-iluminat" },
-      { name: "Tuburi și accesorii instalații", slug: "tuburi-si-accesorii-instalatii" },
-      { name: "Doze și conectori",              slug: "doze-si-conectori" },
-    ],
-  },
-  {
-    name: "Curte și grădină",
-    slug: "curte-si-gradina",
-    subcategories: [
-      { name: "Pavaje și borduri",            slug: "pavaje-si-borduri" },
-      { name: "Garduri metalice și panouri",  slug: "garduri-metalice-si-panouri" },
-      { name: "Beton și prefabricate",        slug: "beton-si-prefabricate" },
-      { name: "Sisteme de irigații",          slug: "sisteme-de-irigatii" },
-      { name: "Iluminat exterior",            slug: "iluminat-exterior" },
-    ],
-  },
-  {
-    name: "Scule și echipamente",
-    slug: "scule-si-echipamente",
-    subcategories: [
-      { name: "Scule electrice",            slug: "scule-electrice" },
-      { name: "Scule manuale",              slug: "scule-manuale" },
-      { name: "Echipamente de protecție",   slug: "echipamente-de-protectie" },
-      { name: "Accesorii și consumabile",   slug: "accesorii-si-consumabile" },
-    ],
-  },
-]
-
 const NAV_LINKS = [
   { label: "Acasă", href: "/" },
   { label: "Toate produsele", href: "/store" },
@@ -112,9 +25,13 @@ type SideMenuProps = {
   regions: HttpTypes.StoreRegion[] | null
   locales: Locale[] | null
   currentLocale: string | null
+  categories: HttpTypes.StoreProductCategory[]
 }
 
-const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
+const SideMenu = ({ regions, locales, currentLocale, categories }: SideMenuProps) => {
+  const topLevelCategories = categories
+    .filter((c) => !c.parent_category_id)
+    .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
   const countryToggleState = useToggleState()
   const languageToggleState = useToggleState()
   const [searchQuery, setSearchQuery] = useState("")
@@ -253,15 +170,17 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                       Categorii
                     </p>
                     <ul className="flex flex-col">
-                      {CATEGORIES.map((cat) => {
-                        const isExpanded = expandedSlug === cat.slug
-                        const isActive = pathname.includes(`/categories/${cat.slug}`)
+                      {topLevelCategories.map((cat) => {
+                        const isExpanded = expandedSlug === cat.id
+                        const isActive = pathname.includes(`/categories/${cat.handle}`)
+                        const children = (cat.category_children ?? [])
+                          .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
                         return (
-                          <li key={cat.slug}>
+                          <li key={cat.id}>
                             {/* Parent row */}
                             <div className="flex items-center justify-between">
                               <LocalizedClientLink
-                                href={`/categories/${cat.slug}`}
+                                href={`/categories/${cat.handle}`}
                                 onClick={close}
                                 className={`flex-1 flex items-center h-10 text-sm font-medium transition-colors ${
                                   isActive ? "text-[#F27A1A]" : "text-[#333333] hover:text-[#F27A1A]"
@@ -269,27 +188,29 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                               >
                                 {cat.name}
                               </LocalizedClientLink>
-                              <button
-                                onClick={() => setExpandedSlug(isExpanded ? null : cat.slug)}
-                                aria-label={isExpanded ? "Restrânge" : "Extinde"}
-                                className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-[#F27A1A] transition-colors"
-                              >
-                                <svg
-                                  className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
-                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                              {children.length > 0 && (
+                                <button
+                                  onClick={() => setExpandedSlug(isExpanded ? null : cat.id)}
+                                  aria-label={isExpanded ? "Restrânge" : "Extinde"}
+                                  className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-[#F27A1A] transition-colors"
                                 >
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
-                              </button>
+                                  <svg
+                                    className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                  >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                  </svg>
+                                </button>
+                              )}
                             </div>
 
                             {/* Subcategories */}
                             {isExpanded && (
                               <ul className="mb-1 ml-3 border-l border-gray-100 pl-3 flex flex-col gap-y-0.5">
-                                {cat.subcategories.map((sub) => (
-                                  <li key={sub.slug}>
+                                {children.map((sub) => (
+                                  <li key={sub.id}>
                                     <LocalizedClientLink
-                                      href={`/categories/${sub.slug}`}
+                                      href={`/categories/${sub.handle}`}
                                       onClick={close}
                                       className="flex items-center h-8 text-xs text-gray-500 hover:text-[#F27A1A] transition-colors"
                                     >

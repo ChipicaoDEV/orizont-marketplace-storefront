@@ -43,6 +43,7 @@ export default async function Nav() {
                 regions={regions}
                 locales={locales}
                 currentLocale={currentLocale}
+                categories={categories}
               />
             </div>
 
