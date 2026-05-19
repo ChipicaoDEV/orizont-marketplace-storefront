@@ -11,6 +11,8 @@ type RefinementListProps = {
   search?: boolean
   categories?: HttpTypes.StoreProductCategory[]
   selectedCategoryIds?: string[]
+  availableBrands?: string[]
+  brandCounts?: Record<string, number>
   'data-testid'?: string
 }
 
@@ -18,11 +20,15 @@ const RefinementList = ({
   sortBy,
   categories = [],
   selectedCategoryIds = [],
+  availableBrands = [],
+  brandCounts = {},
   'data-testid': dataTestId,
 }: RefinementListProps) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+
+  const activeBrands = searchParams.get("brands")?.split(",").filter(Boolean) ?? []
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -62,9 +68,85 @@ const RefinementList = ({
     router.push(`${pathname}?${params.toString()}`)
   }
 
+  const toggleBrand = (brand: string) => {
+    const next = activeBrands.includes(brand)
+      ? activeBrands.filter((b) => b !== brand)
+      : [...activeBrands, brand]
+    const params = new URLSearchParams(searchParams)
+    if (next.length > 0) {
+      params.set("brands", next.join(","))
+    } else {
+      params.delete("brands")
+    }
+    params.delete("page")
+    router.push(`${pathname}?${params.toString()}`)
+  }
+
   return (
     <div className="flex flex-col gap-y-8" data-testid={dataTestId}>
       <SortProducts sortBy={sortBy} setQueryParams={setQueryParams} />
+
+      {availableBrands.length > 0 && (
+        <div className="flex flex-col gap-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 leading-none">
+              Producător
+            </span>
+            {activeBrands.length > 0 && (
+              <button
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams)
+                  params.delete("brands")
+                  params.delete("page")
+                  router.push(`${pathname}?${params.toString()}`)
+                }}
+                className="text-[10px] text-[#F27A1A] hover:text-[#D4600E] transition-colors duration-200 underline"
+              >
+                Resetează
+              </button>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-y-1 max-h-56 overflow-y-auto pr-1">
+            {availableBrands.map((brand) => {
+              const isSelected = activeBrands.includes(brand)
+              return (
+                <button
+                  key={brand}
+                  onClick={() => toggleBrand(brand)}
+                  className={`flex items-center justify-between gap-x-3 py-2 px-4 rounded-xl cursor-pointer transition-all duration-200 border border-transparent w-full text-left ${
+                    isSelected
+                      ? "bg-black text-white shadow-xl shadow-black/10"
+                      : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                  }`}
+                >
+                  <span className="flex items-center gap-x-2.5 min-w-0">
+                    <span
+                      className={`w-4 h-4 rounded flex-shrink-0 border flex items-center justify-center transition-all duration-200 ${
+                        isSelected
+                          ? "bg-[#F27A1A] border-[#F27A1A]"
+                          : "border-gray-300 bg-white"
+                      }`}
+                    >
+                      {isSelected && (
+                        <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                    </span>
+                    <span className="text-[11px] font-bold uppercase tracking-widest leading-none truncate">
+                      {brand}
+                    </span>
+                  </span>
+                  <span className="text-[10px] text-gray-400 flex-shrink-0 font-normal normal-case tracking-normal">
+                    ({brandCounts[brand] ?? 0})
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {categories.length > 0 && (
         <div className="flex flex-col gap-y-4">
