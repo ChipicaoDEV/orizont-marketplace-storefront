@@ -54,17 +54,26 @@ export default async function CategoryTemplate({
 }) {
   if (!category || !countryCode) notFound()
 
-  // ── Fetch all products for this category ────────────────────────────────────
-  const { response: { products: allProducts } } = await listProducts({
-    pageParam: 1,
-    queryParams: {
-      limit: 100,
-      category_id: [category.id],
-      fields:
-        "*variants.calculated_price,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder,+metadata",
-    },
-    countryCode,
-  }).catch(() => ({ response: { products: [] as HttpTypes.StoreProduct[], count: 0 }, nextPage: null }))
+  // ── Fetch ALL products for this category (paginate past 100) ───────────────
+  const FETCH_LIMIT = 100
+  const allProducts: HttpTypes.StoreProduct[] = []
+  let fetchPage = 1
+  let hasMore = true
+  while (hasMore) {
+    const { response: { products: batch }, nextPage } = await listProducts({
+      pageParam: fetchPage,
+      queryParams: {
+        limit: FETCH_LIMIT,
+        category_id: [category.id],
+        fields:
+          "*variants.calculated_price,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder,+metadata",
+      },
+      countryCode,
+    }).catch(() => ({ response: { products: [] as HttpTypes.StoreProduct[], count: 0 }, nextPage: null }))
+    allProducts.push(...batch)
+    hasMore = nextPage !== null
+    fetchPage++
+  }
 
   // ── Region (needed for ProductCard price) ───────────────────────────────────
   // We obtain the region via the first product's pricing, or fall back to fetching it
