@@ -17,6 +17,7 @@ const HIDDEN_META_KEYS = new Set([
   "vendor",
   "_score",
   "guides",
+  "images",
 ])
 
 const BASE_TABS = ["Descriere", "Specificații tehnice", "Livrare"] as const
@@ -43,9 +44,21 @@ const PdpTabs = ({ product, selectedVariant }: PdpTabsProps) => {
 
   const [activeTab, setActiveTab] = useState<Tab>("Descriere")
 
-  const specEntries = Object.entries(product.metadata ?? {}).filter(
+  const productSpecEntries = Object.entries(product.metadata ?? {}).filter(
     ([k]) => !HIDDEN_META_KEYS.has(k)
   )
+
+  const variantSpecEntries = Object.entries(selectedVariant?.metadata ?? {}).filter(
+    ([k]) => !HIDDEN_META_KEYS.has(k)
+  )
+
+  // A variant spec with the same key replaces the product-level one for this variant;
+  // keys not set on the variant keep falling back to the product-level value.
+  const variantSpecKeys = new Set(variantSpecEntries.map(([k]) => k))
+  const specEntries: [string, unknown][] = [
+    ...productSpecEntries.filter(([k]) => !variantSpecKeys.has(k)),
+    ...variantSpecEntries,
+  ]
 
   return (
     <div className="mt-10">
