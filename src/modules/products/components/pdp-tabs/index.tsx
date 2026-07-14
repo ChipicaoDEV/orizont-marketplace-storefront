@@ -44,12 +44,14 @@ const PdpTabs = ({ product, selectedVariant }: PdpTabsProps) => {
 
   const [activeTab, setActiveTab] = useState<Tab>("Descriere")
 
+  const isBlank = (v: unknown) => typeof v === "string" && v.trim() === ""
+
   const productSpecEntries = Object.entries(product.metadata ?? {}).filter(
-    ([k]) => !HIDDEN_META_KEYS.has(k)
+    ([k, v]) => !HIDDEN_META_KEYS.has(k) && !isBlank(v)
   )
 
   const variantSpecEntries = Object.entries(selectedVariant?.metadata ?? {}).filter(
-    ([k]) => !HIDDEN_META_KEYS.has(k)
+    ([k, v]) => !HIDDEN_META_KEYS.has(k) && !isBlank(v)
   )
 
   // A variant spec with the same key replaces the product-level one for this variant;
