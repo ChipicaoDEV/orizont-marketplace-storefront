@@ -1,17 +1,17 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useMemo } from "react"
 import { HttpTypes } from "@medusajs/types"
 import PdpGallery from "@modules/products/components/pdp-gallery"
 import PdpActions from "@modules/products/components/pdp-actions"
 
 type Props = {
   product: HttpTypes.StoreProduct
+  selectedVariant: HttpTypes.StoreProductVariant | undefined
+  onVariantChange: (variant: HttpTypes.StoreProductVariant | undefined) => void
 }
 
-const PdpClientSection = ({ product }: Props) => {
-  const [selectedVariant, setSelectedVariant] = useState<HttpTypes.StoreProductVariant | undefined>()
-
+const PdpClientSection = ({ product, selectedVariant, onVariantChange }: Props) => {
   const brand = product.metadata?.brand as string | undefined
   const sku = (product as any).variants?.[0]?.sku as string | undefined
 
@@ -62,7 +62,7 @@ const PdpClientSection = ({ product }: Props) => {
         <div className="border-t border-gray-100" />
 
         {/* Actions: price, stock, quantity, add-to-cart, quote form */}
-        <PdpActions product={product} onVariantChange={setSelectedVariant} />
+        <PdpActions product={product} onVariantChange={onVariantChange} />
       </div>
     </div>
   )

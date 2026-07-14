@@ -5,6 +5,7 @@ import { HttpTypes } from "@medusajs/types"
 
 type PdpTabsProps = {
   product: HttpTypes.StoreProduct
+  selectedVariant?: HttpTypes.StoreProductVariant
 }
 
 type Guide = { name: string; url: string }
@@ -22,10 +23,21 @@ const BASE_TABS = ["Descriere", "Specificații tehnice", "Livrare"] as const
 const GUIDES_TAB = "Ghiduri și informații utile" as const
 type Tab = typeof BASE_TABS[number] | typeof GUIDES_TAB | ""
 
-const PdpTabs = ({ product }: PdpTabsProps) => {
-  const guides: Guide[] = Array.isArray((product.metadata as any)?.guides)
+const PdpTabs = ({ product, selectedVariant }: PdpTabsProps) => {
+  const productGuides: Guide[] = Array.isArray((product.metadata as any)?.guides)
     ? ((product.metadata as any).guides as Guide[])
     : []
+
+  const variantGuides: Guide[] = Array.isArray((selectedVariant?.metadata as any)?.guides)
+    ? ((selectedVariant!.metadata as any).guides as Guide[])
+    : []
+
+  // A variant document with the same name replaces the product-level one for this variant.
+  const variantNames = new Set(variantGuides.map((g) => g.name))
+  const guides: Guide[] = [
+    ...productGuides.filter((g) => !variantNames.has(g.name)),
+    ...variantGuides,
+  ]
 
   const tabs: Tab[] = guides.length > 0 ? [...BASE_TABS, GUIDES_TAB] : [...BASE_TABS]
 

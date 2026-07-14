@@ -2,8 +2,7 @@ import { notFound } from "next/navigation"
 import { HttpTypes } from "@medusajs/types"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import PdpClientSection from "@modules/products/components/pdp-client-section"
-import PdpTabs from "@modules/products/components/pdp-tabs"
+import PdpBody from "@modules/products/components/pdp-body"
 
 type ProductTemplateProps = {
   product: HttpTypes.StoreProduct
@@ -58,13 +57,8 @@ const ProductTemplate = ({
         </ol>
       </nav>
 
-      {/* ── Two-column layout ── */}
-      <PdpClientSection product={product} />
-
-      {/* ── Tabs (below both columns) ── */}
-      <div className="mt-10 bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-        <PdpTabs product={product} />
-      </div>
+      {/* ── Two-column layout + tabs (shares selected variant state) ── */}
+      <PdpBody product={product} />
     </div>
   )
 }
